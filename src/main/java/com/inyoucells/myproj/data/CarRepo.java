@@ -20,8 +20,8 @@ public class CarRepo {
         cars = cars.stream().filter(car -> car.getId() != id).collect(Collectors.toList());
     }
 
-    public synchronized void removeCarsWithDriverIds(long driverId) {
-        cars = cars.stream().filter(car -> driverId == car.getDriverId()).collect(Collectors.toList());
+    public synchronized void removeCarsWithDriverId(long driverId) {
+        cars = cars.stream().filter(car -> driverId != car.getDriverId()).collect(Collectors.toList());
     }
 
     public synchronized int addCar(Car car) {

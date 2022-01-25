@@ -11,8 +11,12 @@ import java.util.stream.Collectors;
 @Service
 public class DriverRepo {
 
+    private final CarRepo carRepo;
+
     @Autowired
-    CarRepo carRepo;
+    public DriverRepo(CarRepo carRepo) {
+        this.carRepo = carRepo;
+    }
 
     private List<Driver> drivers = new ArrayList<>();
     private int idCounter = 0;
@@ -23,7 +27,7 @@ public class DriverRepo {
 
     public synchronized void removeDriver(long id) {
         drivers = drivers.stream().filter(driver -> driver.getId() != id).collect(Collectors.toList());
-        carRepo.removeCarsWithDriverIds(id);
+        carRepo.removeCarsWithDriverId(id);
     }
 
     public synchronized int addDriver(Driver driver) {
