@@ -1,12 +1,9 @@
 package com.inyoucells.myproj.service.auth;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import java.util.Optional;
 
-@Service
 public interface AuthService {
+    Optional<String> signup(String email, String pass);
 
-    ResponseEntity<Object> signup(String email, String pass);
-
-    ResponseEntity<Object> signin(String email, String pass);
+    Optional<String> signin(String email, String pass);
 }

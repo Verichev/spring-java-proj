@@ -11,22 +11,22 @@ public class UserRepo {
     private final List<User> users = new ArrayList<>();
     private int idCounter = 0;
 
-    public synchronized String addUser(String email, String pass) {
+    public synchronized Optional<String> addUser(String email, String pass) {
         boolean found = users.stream().anyMatch(it -> Objects.equals(email, it.getEmail()));
         if (found) {
-            return null;
+            return Optional.empty();
         }
         idCounter++;
         users.add(new User(idCounter, email, pass));
-        return createToken(idCounter);
+        return Optional.of(createToken(idCounter));
     }
 
-    public synchronized String checkUser(String email, String pass) {
+    public synchronized Optional<String> checkUser(String email, String pass) {
         Optional<User> userOptional = users.stream().filter(it -> Objects.equals(email, it.getEmail()) && Objects.equals(pass, it.getPassword())).findFirst();
         if (userOptional.isEmpty() || !pass.equals(userOptional.get().getPassword())) {
-            return null;
+            return Optional.empty();
         } else {
-            return createToken(userOptional.get().getId());
+            return Optional.of(createToken(userOptional.get().getId()));
         }
     }
 

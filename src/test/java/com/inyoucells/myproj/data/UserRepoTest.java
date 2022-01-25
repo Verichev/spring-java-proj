@@ -6,8 +6,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
 
 @ExtendWith(MockitoExtension.class)
@@ -25,39 +27,44 @@ class UserRepoTest {
         Mockito.doReturn("token1").when(userRepo).createToken(1);
         Mockito.doReturn("token2").when(userRepo).createToken(2);
 
-        String token = userRepo.addUser("email1", "pass1");
+        Optional<String> token = userRepo.addUser("email1", "pass1");
 
         Mockito.verify(userRepo).createToken(1);
-        assertEquals("token1", token);
+        assertTrue(token.isPresent());
+        assertEquals("token1", token.get());
 
         token = userRepo.addUser("email2", "pass1");
 
         Mockito.verify(userRepo).createToken(2);
-        assertEquals("token2", token);
+        assertTrue(token.isPresent());
+        assertEquals("token2", token.get());
 
         token = userRepo.addUser("email1", "pass2");
         Mockito.verify(userRepo, Mockito.times(2)).createToken(anyLong());
-        assertNull(token);
+        assertTrue(token.isEmpty());
     }
 
     @Test
-    void checkUser() {
+    void checkUser_whenUsersEmpty() {
+        Optional<String> token = userRepo.checkUser("email1", "pass1");
+
+        assertTrue(token.isEmpty());
+    }
+
+    @Test
+    void checkUser_whenUserPresent() {
         Mockito.doReturn("token1").when(userRepo).createToken(1);
-
-        String token = userRepo.checkUser("email1", "pass1");
-
-        assertNull(token);
-
         userRepo.addUser("email1", "pass1");
 
-        token = userRepo.checkUser("email1", "pass1");
+        Optional<String> token = userRepo.checkUser("email1", "pass1");
 
         Mockito.verify(userRepo, Mockito.times(2)).createToken(1);
-        assertEquals("token1", token);
+        assertTrue(token.isPresent());
+        assertEquals("token1", token.get());
 
         token = userRepo.checkUser("email2", "pass1");
 
         Mockito.verify(userRepo, Mockito.times(2)).createToken(anyLong());
-        assertNull(token);
+        assertTrue(token.isEmpty());
     }
 }

@@ -1,28 +1,33 @@
 package com.inyoucells.myproj.service.driver;
 
 import com.inyoucells.myproj.models.Driver;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.inyoucells.myproj.utils.ControllerUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController()
+@RestController
 public class DriverController {
 
-    @Autowired
-    DriverService driverService;
+    private final DriverService driverService;
+    private final ControllerUtils controllerUtils;
+
+    public DriverController(DriverService driverService, ControllerUtils controllerUtils) {
+        this.driverService = driverService;
+        this.controllerUtils = controllerUtils;
+    }
 
     @GetMapping("/driver")
-    ResponseEntity<Object> getDrivers(@RequestHeader("token") String token) {
-        return driverService.getDrivers(token);
+    ResponseEntity<Object> getDrivers(@RequestHeader String token) {
+        return controllerUtils.authorizedFunction(token, driverService::getDrivers);
     }
 
     @DeleteMapping("/driver/{id}")
-    ResponseEntity<Object> removeDriver(@RequestHeader("token") String token, @PathVariable long id) {
-        return driverService.removeDriver(token, id);
+    ResponseEntity<Object> removeDriver(@RequestHeader String token, @PathVariable long id) {
+        return controllerUtils.authorizedConsumer(token, userId -> driverService.removeDriver(userId, id));
     }
 
     @PostMapping("/driver")
-    ResponseEntity<Object> addDriver(@RequestHeader("token") String token, @RequestBody Driver driver) {
-        return driverService.addDriver(token, driver);
+    ResponseEntity<Object> addDriver(@RequestHeader String token, @RequestBody Driver driver) {
+        return controllerUtils.authorizedFunction(token, userId -> driverService.addDriver(userId, driver));
     }
 }

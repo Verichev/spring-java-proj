@@ -1,12 +1,13 @@
 package com.inyoucells.myproj.service.car;
 
 import com.inyoucells.myproj.models.Car;
-import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 public interface CarService {
-    ResponseEntity<Object> getCars(String token);
+    List<Car> getCars(long userId);
 
-    ResponseEntity<Object> removeCar(String token, long id);
+    void removeCar(long userId, long id);
 
-    ResponseEntity<Object> addCar(String token, Car car);
+    long addCar(long userId, Car car);
 }
