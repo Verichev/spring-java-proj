@@ -1,18 +1,19 @@
 package com.inyoucells.myproj.service.auth;
 
-import com.inyoucells.myproj.models.ApiError;
+import com.inyoucells.myproj.models.HttpError;
 import com.inyoucells.myproj.models.TokenValidationResult;
-import org.springframework.http.HttpStatus;
+import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 
+@Log4j
 @Service
 public class TokenValidator {
 
     public TokenValidationResult check(String token) {
         if (token.isEmpty()) {
-            return new TokenValidationResult(null, new ApiError(HttpStatus.UNAUTHORIZED, "Unauthorised request"));
+            return new TokenValidationResult(-1L, HttpError.WRONG_CREDENTIALS);
         }
         String[] sp = token.split("_");
         Calendar calendar = Calendar.getInstance();
@@ -22,20 +23,18 @@ public class TokenValidator {
         try {
             expired = Long.parseLong(sp[1]);
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            log.error(e);
         }
         try {
             userId = Long.parseLong(sp[0]);
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            log.error(e);
         }
         if (userId == null || expired != null && calendar.getTimeInMillis() > expired) {
-            ApiError apiError =
-                    new ApiError(HttpStatus.UNAUTHORIZED, "Authorization is outdated");
-            return new TokenValidationResult(null, apiError);
+            return new TokenValidationResult(null, HttpError.AUTHORIZATION_IS_OUTDATED);
 
         } else {
-            return new TokenValidationResult(userId, null);
+            return new TokenValidationResult(userId, HttpError.EMPTY);
         }
     }
 }

@@ -1,12 +1,13 @@
 package com.inyoucells.myproj.service.driver;
 
 import com.inyoucells.myproj.models.Driver;
-import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 public interface DriverService {
-    ResponseEntity<Object> getDrivers(String token);
+    List<Driver> getDrivers(long userId);
 
-    ResponseEntity<Object> removeDriver(String token, long id);
+    void removeDriver(long userId, long id);
 
-    ResponseEntity<Object> addDriver(String token, Driver driver);
+    long addDriver(long userId, Driver driver);
 }

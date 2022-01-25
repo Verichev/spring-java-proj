@@ -10,21 +10,21 @@ import java.util.stream.Collectors;
 @Service
 public class CarRepo {
     private List<Car> cars = new ArrayList<>();
-    private int idCounter = 0;
+    private long idCounter = 0;
 
     public List<Car> getCars() {
         return cars;
     }
 
-    public synchronized void removeCar(long id) {
+    public void removeCar(long id) {
         cars = cars.stream().filter(car -> car.getId() != id).collect(Collectors.toList());
     }
 
-    public synchronized void removeCarsWithDriverId(long driverId) {
+    public void removeCarsWithDriverId(long driverId) {
         cars = cars.stream().filter(car -> driverId != car.getDriverId()).collect(Collectors.toList());
     }
 
-    public synchronized int addCar(Car car) {
+    public synchronized long addCar(Car car) {
         idCounter++;
         cars.add(new Car(idCounter, car.getBrand(), car.getYear(), car.isUsed(), car.getHorsepower(), car.getDriverId()));
         return idCounter;
