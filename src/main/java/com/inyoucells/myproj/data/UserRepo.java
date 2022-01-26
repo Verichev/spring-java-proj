@@ -32,7 +32,7 @@ public class UserRepo {
 
     String createToken(long idCounter) {
         Calendar calendar = Calendar.getInstance();
-        calendar.roll(Calendar.MINUTE, 5);
+        calendar.add(Calendar.MINUTE, 5);
         String token = idCounter + "_" + calendar.getTimeInMillis();
         return token;
     }

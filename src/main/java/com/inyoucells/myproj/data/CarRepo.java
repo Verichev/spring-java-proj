@@ -16,11 +16,11 @@ public class CarRepo {
         return cars;
     }
 
-    public void removeCar(long id) {
+    public synchronized void removeCar(long id) {
         cars = cars.stream().filter(car -> car.getId() != id).collect(Collectors.toList());
     }
 
-    public void removeCarsWithDriverId(long driverId) {
+    public synchronized void removeCarsWithDriverId(long driverId) {
         cars = cars.stream().filter(car -> driverId != car.getDriverId()).collect(Collectors.toList());
     }
 
@@ -28,5 +28,10 @@ public class CarRepo {
         idCounter++;
         cars.add(new Car(idCounter, car.getBrand(), car.getYear(), car.isUsed(), car.getHorsepower(), car.getDriverId()));
         return idCounter;
+    }
+
+    public synchronized void clean() {
+        cars.clear();
+        idCounter = 0;
     }
 }

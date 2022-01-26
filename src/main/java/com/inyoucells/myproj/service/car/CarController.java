@@ -25,7 +25,7 @@ public class CarController {
         return controllerUtils.authorizedFunction(token, carService::getCars);
     }
 
-    @DeleteMapping("/car/{id}")
+    @DeleteMapping("/car/{carId}")
     ResponseEntity<Object> removeCar(@RequestHeader String token, @PathVariable long carId) {
         return controllerUtils.authorizedConsumer(token, userId -> carService.removeCar(userId, carId));
     }
