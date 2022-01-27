@@ -3,6 +3,7 @@ package com.inyoucells.myproj.utils;
 import com.inyoucells.myproj.models.HttpError;
 import com.inyoucells.myproj.models.TokenValidationResult;
 import com.inyoucells.myproj.service.auth.TokenValidator;
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+@Log4j
 @Service
 public class ControllerUtils {
     private final TokenValidator tokenValidator;
@@ -44,6 +46,7 @@ public class ControllerUtils {
         try {
             return action.apply(validationResult.getUserId());
         } catch (Exception exception) {
+            log.error(exception);
             return new ResponseEntity<>(HttpError.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -52,6 +55,7 @@ public class ControllerUtils {
         try {
             return action.call();
         } catch (Exception exception) {
+            log.error(exception);
             return new ResponseEntity<>(HttpError.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
