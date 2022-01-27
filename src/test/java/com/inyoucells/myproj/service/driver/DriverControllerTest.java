@@ -1,9 +1,9 @@
-package com.inyoucells.myproj.service.car;
+package com.inyoucells.myproj.service.driver;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.inyoucells.myproj.data.CarFakeProvider;
-import com.inyoucells.myproj.data.CarRepo;
-import com.inyoucells.myproj.models.Car;
+import com.inyoucells.myproj.data.DriverFakeProvider;
+import com.inyoucells.myproj.data.DriverRepo;
+import com.inyoucells.myproj.models.Driver;
 import com.inyoucells.myproj.models.HttpError;
 import com.inyoucells.myproj.service.auth.AuthConsts;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class CarControllerTest {
+class DriverControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -37,19 +37,19 @@ class CarControllerTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private CarRepo carRepo;
+    private DriverRepo driverRepo;
 
-    private final CarFakeProvider carFakeProvider = new CarFakeProvider(0);
+    private final DriverFakeProvider driverFakeProvider = new DriverFakeProvider(0);
 
     @BeforeEach
     void setup() {
-        carRepo.clean();
-        carFakeProvider.reset();
+        driverRepo.clean();
+        driverFakeProvider.reset();
     }
 
     @Test
-    void getCars_authOutdated() throws Exception {
-        MockHttpServletRequestBuilder requestBuilder = get("/car").header("token", "1_1");
+    void getDrivers_authOutdated() throws Exception {
+        MockHttpServletRequestBuilder requestBuilder = get("/driver").header("token", "1_1");
         ResultActions resultActions = mockMvc.perform(requestBuilder);
         MvcResult result = resultActions.andExpect(status().isUnauthorized()).andReturn();
 
@@ -57,108 +57,92 @@ class CarControllerTest {
     }
 
     @Test
-    void getCars_authorized_empty() throws Exception {
+    void getDrivers_authorized_empty() throws Exception {
         String token = createValidToken();
-        MockHttpServletRequestBuilder requestBuilder = get("/car").header("token", token);
+        MockHttpServletRequestBuilder requestBuilder = get("/driver").header("token", token);
 
         ResultActions resultActions = mockMvc.perform(requestBuilder);
 
         MvcResult result = resultActions.andExpect(status().isOk()).andReturn();
-        List<Car> cars = Arrays.asList(objectMapper.readValue(result.getResponse().getContentAsString(), Car[].class));
-        assertEquals(Collections.emptyList(), cars);
+        List<Driver> drivers = Arrays.asList(objectMapper.readValue(result.getResponse().getContentAsString(), Driver[].class));
+        assertEquals(Collections.emptyList(), drivers);
     }
 
     @Test
-    void getCars_authorized_addCars() throws Exception {
+    void getDrivers_authorized_addDrivers() throws Exception {
         String token = createValidToken();
-        Car car1 = carFakeProvider.generateCar();
-        Car car2 = carFakeProvider.generateCar();
-        MockHttpServletRequestBuilder requestBuilder1 = post("/car")
+        Driver driver1 = driverFakeProvider.generateDriver();
+        Driver driver2 = driverFakeProvider.generateDriver();
+        MockHttpServletRequestBuilder requestBuilder1 = post("/driver")
                 .header("token", token)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(car1));
-        MockHttpServletRequestBuilder requestBuilder2 = post("/car")
+                .content(objectMapper.writeValueAsString(driver1));
+        MockHttpServletRequestBuilder requestBuilder2 = post("/driver")
                 .header("token", token)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(car2));
+                .content(objectMapper.writeValueAsString(driver2));
 
         mockMvc.perform(requestBuilder1).andExpect(status().isOk());
         mockMvc.perform(requestBuilder2).andExpect(status().isOk());
 
-        MockHttpServletRequestBuilder requestBuilder = get("/car").header("token", token);
+        MockHttpServletRequestBuilder requestBuilder = get("/driver").header("token", token);
 
         ResultActions resultActions = mockMvc.perform(requestBuilder);
 
         MvcResult result = resultActions.andExpect(status().isOk()).andReturn();
-        List<Car> cars = Arrays.asList(objectMapper.readValue(result.getResponse().getContentAsString(), Car[].class));
-        assertEquals(Arrays.asList(car1, car2), cars);
+        List<Driver> drivers = Arrays.asList(objectMapper.readValue(result.getResponse().getContentAsString(), Driver[].class));
+        assertEquals(Arrays.asList(driver1, driver2), drivers);
     }
 
     @Test
-    void removeCar() throws Exception {
+    void removeDriver() throws Exception {
         String token = createValidToken();
-        Car car1 = carFakeProvider.generateCar();
-        Car car2 = carFakeProvider.generateCar();
-        MockHttpServletRequestBuilder requestBuilder1 = post("/car")
+        Driver driver1 = driverFakeProvider.generateDriver();
+        Driver driver2 = driverFakeProvider.generateDriver();
+        MockHttpServletRequestBuilder requestBuilder1 = post("/driver")
                 .header("token", token)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(car1));
-        MockHttpServletRequestBuilder requestBuilder2 = post("/car")
+                .content(objectMapper.writeValueAsString(driver1));
+        MockHttpServletRequestBuilder requestBuilder2 = post("/driver")
                 .header("token", token)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(car2));
+                .content(objectMapper.writeValueAsString(driver2));
 
         mockMvc.perform(requestBuilder1).andExpect(status().isOk());
         mockMvc.perform(requestBuilder2).andExpect(status().isOk());
 
-        MockHttpServletRequestBuilder requestBuilder = get("/car").header("token", token);
+        MockHttpServletRequestBuilder requestBuilder = get("/driver").header("token", token);
 
         ResultActions resultActions = mockMvc.perform(requestBuilder);
 
         MvcResult result = resultActions.andExpect(status().isOk()).andReturn();
-        List<Car> cars = Arrays.asList(objectMapper.readValue(result.getResponse().getContentAsString(), Car[].class));
-        assertEquals(List.of(car1, car2), cars);
+        List<Driver> drivers = Arrays.asList(objectMapper.readValue(result.getResponse().getContentAsString(), Driver[].class));
+        assertEquals(List.of(driver1, driver2), drivers);
 
-        MockHttpServletRequestBuilder requestBuilder3 = delete("/car/{carId}", car2.getId())
+        MockHttpServletRequestBuilder requestBuilder3 = delete("/driver/{driverId}", driver2.getId())
                 .header("token", token);
 
         mockMvc.perform(requestBuilder3).andExpect(status().isOk());
 
-        requestBuilder = get("/car").header("token", token);
+        requestBuilder = get("/driver").header("token", token);
 
         resultActions = mockMvc.perform(requestBuilder);
 
         result = resultActions.andExpect(status().isOk()).andReturn();
-        cars = Arrays.asList(objectMapper.readValue(result.getResponse().getContentAsString(), Car[].class));
-        assertEquals(List.of(car1), cars);
+        drivers = Arrays.asList(objectMapper.readValue(result.getResponse().getContentAsString(), Driver[].class));
+        assertEquals(List.of(driver1), drivers);
     }
 
     @Test
-    void addCar() throws Exception {
+    void addDriver() throws Exception {
         String token = createValidToken();
-        Car car1 = carFakeProvider.generateCar();
-        MockHttpServletRequestBuilder requestBuilder1 = post("/car")
+        Driver driver1 = driverFakeProvider.generateDriver();
+        MockHttpServletRequestBuilder requestBuilder1 = post("/driver")
                 .header("token", token)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(car1));
+                .content(objectMapper.writeValueAsString(driver1));
 
         mockMvc.perform(requestBuilder1).andExpect(status().isOk());
-    }
-
-    @Test
-    void addCar_missingDriverId() throws Exception {
-        String token = createValidToken();
-        Car car = carFakeProvider.generateCar();
-        car.setDriverId(null);
-        MockHttpServletRequestBuilder requestBuilder = post("/car")
-                .header("token", token)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(car));
-
-        ResultActions resultActions = mockMvc.perform(requestBuilder);
-
-        MvcResult result = resultActions.andExpect(status().isBadRequest()).andReturn();
-        assertEquals("\"" + HttpError.MISSING_DRIVER_ID.getMessage() + "\"", result.getResponse().getContentAsString());
     }
 
     private String createValidToken() {

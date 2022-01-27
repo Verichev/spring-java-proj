@@ -1,6 +1,7 @@
 package com.inyoucells.myproj.data;
 
 import com.inyoucells.myproj.models.User;
+import com.inyoucells.myproj.service.auth.AuthConsts;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -32,8 +33,13 @@ public class UserRepo {
 
     String createToken(long idCounter) {
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, 5);
+        calendar.add(Calendar.MILLISECOND, AuthConsts.TOKEN_EXPIRATION_TIME);
         String token = idCounter + "_" + calendar.getTimeInMillis();
         return token;
+    }
+
+    public synchronized void clean() {
+        users.clear();
+        idCounter = 0;
     }
 }
