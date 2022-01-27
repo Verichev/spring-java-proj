@@ -21,9 +21,9 @@ public class DriverController {
         return controllerUtils.authorizedFunction(token, driverService::getDrivers);
     }
 
-    @DeleteMapping("/driver/{id}")
-    ResponseEntity<Object> removeDriver(@RequestHeader String token, @PathVariable long id) {
-        return controllerUtils.authorizedConsumer(token, userId -> driverService.removeDriver(userId, id));
+    @DeleteMapping("/driver/{driverId}")
+    ResponseEntity<Object> removeDriver(@RequestHeader String token, @PathVariable long driverId) {
+        return controllerUtils.authorizedConsumer(token, userId -> driverService.removeDriver(userId, driverId));
     }
 
     @PostMapping("/driver")

@@ -35,4 +35,9 @@ public class DriverRepo {
         drivers.add(new Driver(idCounter, driver.getName(), driver.getLicence()));
         return idCounter;
     }
+
+    public synchronized void clean() {
+        drivers.clear();
+        idCounter = 0;
+    }
 }
