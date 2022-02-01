@@ -1,5 +1,6 @@
 package com.inyoucells.myproj.models;
 
+import com.inyoucells.myproj.data.entity.CarEntity;
 import lombok.Data;
 
 @Data
@@ -18,5 +19,14 @@ public class Car {
         this.used = used;
         this.horsepower = horsepower;
         this.driverId = driverId;
+    }
+
+    public Car(CarEntity carEntity) {
+        id = carEntity.getId();
+        brand = carEntity.getBrand();
+        year = carEntity.getYear();
+        used = carEntity.isUsed();
+        horsepower = carEntity.getHorsepower();
+        driverId = carEntity.getDriverId();
     }
 }

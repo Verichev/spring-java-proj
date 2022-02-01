@@ -3,6 +3,7 @@ package com.inyoucells.myproj.service.car;
 import com.inyoucells.myproj.data.CarFakeProvider;
 import com.inyoucells.myproj.data.CarRepo;
 import com.inyoucells.myproj.models.Car;
+import com.inyoucells.myproj.models.ServiceError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,26 +31,26 @@ class CarServiceImplTest {
     }
 
     @Test
-    void getCars() {
-        Mockito.doReturn(Collections.emptyList()).when(carRepo).getCars();
-        List<Car> result = carService.getCars(-1);
+    void getCars() throws ServiceError {
+        Mockito.doReturn(Collections.emptyList()).when(carRepo).getCars(10L, 100L);
+        List<Car> result = carService.getCars(10L, 100L);
 
-        Mockito.verify(carRepo).getCars();
+        Mockito.verify(carRepo).getCars(10L, 100L);
         assertEquals(Collections.emptyList(), result);
     }
 
     @Test
-    void removeCar() {
-        carService.removeCar(-1, 3);
+    void removeCar() throws ServiceError {
+        carService.removeCar(10, 3);
 
-        Mockito.verify(carRepo).removeCar(3);
+        Mockito.verify(carRepo).removeCar(10, 3);
     }
 
     @Test
-    void addCar() {
+    void addCar() throws ServiceError {
         Car car = carFakeProvider.generateCar();
-        carService.addCar(-1, car);
+        carService.addCar(10, car);
 
-        Mockito.verify(carRepo).addCar(car);
+        Mockito.verify(carRepo).addCar(10, car);
     }
 }

@@ -2,6 +2,7 @@ package com.inyoucells.myproj.service.driver;
 
 import com.inyoucells.myproj.data.DriverRepo;
 import com.inyoucells.myproj.models.Driver;
+import com.inyoucells.myproj.models.ServiceError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,25 +29,34 @@ class DriverServiceImplTest {
 
     @Test
     void getDrivers() {
-        Mockito.doReturn(Collections.emptyList()).when(driverRepo).getDrivers();
+        Mockito.doReturn(Collections.emptyList()).when(driverRepo).getDrivers(-1);
         List<Driver> result = driverService.getDrivers(-1);
 
-        Mockito.verify(driverRepo).getDrivers();
+        Mockito.verify(driverRepo).getDrivers(-1);
         assertEquals(Collections.emptyList(), result);
     }
 
     @Test
-    void removeCar() {
+    void getDriversFull() {
+        Mockito.doReturn(Collections.emptyList()).when(driverRepo).getDriversFull(-1);
+        List<Driver> result = driverService.getDriversFull(-1);
+
+        Mockito.verify(driverRepo).getDriversFull(-1);
+        assertEquals(Collections.emptyList(), result);
+    }
+
+    @Test
+    void removeCar() throws ServiceError {
         driverService.removeDriver(-1, 3);
 
-        Mockito.verify(driverRepo).removeDriver(3);
+        Mockito.verify(driverRepo).removeDriver(-1, 3);
     }
 
     @Test
     void addCar() {
-        Driver driver = new Driver(3, "testName", "textLicence");
+        Driver driver = new Driver("testName", "textLicence");
         driverService.addDriver(-1, driver);
 
-        Mockito.verify(driverRepo).addDriver(driver);
+        Mockito.verify(driverRepo).addDriver(-1, driver);
     }
 }

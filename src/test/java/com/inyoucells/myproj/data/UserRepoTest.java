@@ -1,8 +1,11 @@
 package com.inyoucells.myproj.data;
 
+import com.inyoucells.myproj.data.entity.UserEntity;
+import com.inyoucells.myproj.data.jpa.UserJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -10,61 +13,67 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.anyLong;
 
 @ExtendWith(MockitoExtension.class)
 class UserRepoTest {
+
+    @Mock
+    UserJpaRepository userJpaRepository;
 
     private UserRepo userRepo;
 
     @BeforeEach
     void setup() {
-        userRepo = Mockito.spy(new UserRepo());
+        userRepo = Mockito.spy(new UserRepo(userJpaRepository));
     }
 
     @Test
-    void getUsers() {
-        Mockito.doReturn("token1").when(userRepo).createToken(1);
-        Mockito.doReturn("token2").when(userRepo).createToken(2);
+    void addUser_isPresent() {
+        UserEntity userEntity = new UserEntity("email", "pass");
+        userEntity.setId(4L);
+        Mockito.doReturn(Optional.of(userEntity)).when(userJpaRepository).findByEmail("email");
 
-        Optional<String> token = userRepo.addUser("email1", "pass1");
+        Optional<String> token = userRepo.addUser("email", "pass");
+        assertTrue(token.isEmpty());
+    }
 
-        Mockito.verify(userRepo).createToken(1);
+    @Test
+    void addUser() {
+        Mockito.doReturn("token1").when(userRepo).createToken(4);
+        UserEntity savedUserEntity = new UserEntity("email", "pass");
+        UserEntity userEntity = new UserEntity("email", "pass");
+        savedUserEntity.setId(4L);
+        Mockito.doReturn(Optional.empty()).when(userJpaRepository).findByEmail("email");
+        Mockito.doReturn(savedUserEntity).when(userJpaRepository).save(userEntity);
+
+        Optional<String> token = userRepo.addUser("email", "pass");
         assertTrue(token.isPresent());
         assertEquals("token1", token.get());
+    }
 
-        token = userRepo.addUser("email2", "pass1");
+    @Test
+    void checkUser_notPresent() {
+        Mockito.doReturn(Optional.empty()).when(userJpaRepository).findByEmailAndPassword("email", "pass");
 
-        Mockito.verify(userRepo).createToken(2);
-        assertTrue(token.isPresent());
-        assertEquals("token2", token.get());
-
-        token = userRepo.addUser("email1", "pass2");
-        Mockito.verify(userRepo, Mockito.times(2)).createToken(anyLong());
+        Optional<String> token = userRepo.checkUser("email", "pass");
         assertTrue(token.isEmpty());
     }
 
     @Test
-    void checkUser_whenUsersEmpty() {
-        Optional<String> token = userRepo.checkUser("email1", "pass1");
+    void checkUser() {
+        Mockito.doReturn("token1").when(userRepo).createToken(4);
+        UserEntity userEntity = new UserEntity("email", "pass");
+        userEntity.setId(4L);
+        Mockito.doReturn(Optional.of(userEntity)).when(userJpaRepository).findByEmailAndPassword("email", "pass");
 
-        assertTrue(token.isEmpty());
-    }
-
-    @Test
-    void checkUser_whenUserPresent() {
-        Mockito.doReturn("token1").when(userRepo).createToken(1);
-        userRepo.addUser("email1", "pass1");
-
-        Optional<String> token = userRepo.checkUser("email1", "pass1");
-
-        Mockito.verify(userRepo, Mockito.times(2)).createToken(1);
+        Optional<String> token = userRepo.checkUser("email", "pass");
         assertTrue(token.isPresent());
         assertEquals("token1", token.get());
+    }
 
-        token = userRepo.checkUser("email2", "pass1");
-
-        Mockito.verify(userRepo, Mockito.times(2)).createToken(anyLong());
-        assertTrue(token.isEmpty());
+    @Test
+    void removeUser() {
+        userRepo.removeUser(10);
+        Mockito.verify(userJpaRepository).deleteById(10L);
     }
 }

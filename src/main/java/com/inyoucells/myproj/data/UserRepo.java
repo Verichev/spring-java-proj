@@ -1,34 +1,42 @@
 package com.inyoucells.myproj.data;
 
-import com.inyoucells.myproj.models.User;
+import com.inyoucells.myproj.data.entity.UserEntity;
+import com.inyoucells.myproj.data.jpa.UserJpaRepository;
 import com.inyoucells.myproj.service.auth.AuthConsts;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.Optional;
 
 @Service
 public class UserRepo {
 
-    private final List<User> users = new ArrayList<>();
-    private int idCounter = 0;
+    private final UserJpaRepository userJpaRepository;
 
-    public synchronized Optional<String> addUser(String email, String pass) {
-        boolean found = users.stream().anyMatch(it -> Objects.equals(email, it.getEmail()));
-        if (found) {
-            return Optional.empty();
-        }
-        idCounter++;
-        users.add(new User(idCounter, email, pass));
-        return Optional.of(createToken(idCounter));
+    public UserRepo(UserJpaRepository userJpaRepository) {
+        this.userJpaRepository = userJpaRepository;
     }
 
-    public synchronized Optional<String> checkUser(String email, String pass) {
-        Optional<User> userOptional = users.stream().filter(it -> Objects.equals(email, it.getEmail()) && Objects.equals(pass, it.getPassword())).findFirst();
-        if (userOptional.isEmpty() || !pass.equals(userOptional.get().getPassword())) {
+    public Optional<String> addUser(String email, String pass) {
+        Optional<UserEntity> userOptional = userJpaRepository.findByEmail(email);
+        if (userOptional.isPresent()) {
+            return Optional.empty();
+        }
+        UserEntity userEntity = userJpaRepository.save(new UserEntity(email, pass));
+        return Optional.of(createToken(userEntity.getId()));
+    }
+
+    public Optional<String> checkUser(String email, String pass) {
+        Optional<UserEntity> userOptional = userJpaRepository.findByEmailAndPassword(email, pass);
+        if (userOptional.isEmpty()) {
             return Optional.empty();
         } else {
             return Optional.of(createToken(userOptional.get().getId()));
         }
+    }
+
+    public void removeUser(long userId) {
+        userJpaRepository.deleteById(userId);
     }
 
     String createToken(long idCounter) {
@@ -38,8 +46,7 @@ public class UserRepo {
         return token;
     }
 
-    public synchronized void clean() {
-        users.clear();
-        idCounter = 0;
+    public void clean() {
+        userJpaRepository.deleteAll();
     }
 }
