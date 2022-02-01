@@ -21,8 +21,8 @@ public class CarController {
     }
 
     @GetMapping("/car")
-    ResponseEntity<Object> getCars(@RequestHeader String token) {
-        return controllerUtils.authorizedFunction(token, carService::getCars);
+    ResponseEntity<Object> getCars(@RequestHeader String token, long driverId) {
+        return controllerUtils.authorizedFunction(token, userId -> carService.getCars(userId, driverId));
     }
 
     @DeleteMapping("/car/{carId}")

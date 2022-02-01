@@ -14,7 +14,7 @@ public class DriverFakeProvider {
 
     public Driver generateDriver() {
         index++;
-        return new Driver(index, "name:" + index, "licence:" + index);
+        return new Driver("name:" + index, "licence:" + index);
     }
 
     public void reset() {
