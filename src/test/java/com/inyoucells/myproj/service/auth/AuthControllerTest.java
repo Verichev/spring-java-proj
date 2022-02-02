@@ -1,7 +1,7 @@
 package com.inyoucells.myproj.service.auth;
 
 import com.inyoucells.myproj.data.UserRepo;
-import com.inyoucells.myproj.models.HttpError;
+import com.inyoucells.myproj.models.errors.HttpErrorMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ class AuthControllerTest {
         ResultActions resultActions = mockMvc.perform(requestBuilder);
         MvcResult result = resultActions.andExpect(status().isBadRequest()).andReturn();
 
-        assertEquals("\"" + HttpError.EMAIL_IS_ALREADY_TAKEN.getMessage() + "\"", result.getResponse().getContentAsString());
+        assertEquals("\"" + HttpErrorMessage.EMAIL_IS_ALREADY_TAKEN.getMessage() + "\"", result.getResponse().getContentAsString());
     }
 
     @Test
@@ -65,7 +65,7 @@ class AuthControllerTest {
         ResultActions resultActions = mockMvc.perform(requestBuilder);
         MvcResult result = resultActions.andExpect(status().isUnauthorized()).andReturn();
 
-        assertEquals("\"" + HttpError.WRONG_CREDENTIALS.getMessage() + "\"", result.getResponse().getContentAsString());
+        assertEquals("\"" + HttpErrorMessage.WRONG_CREDENTIALS.getMessage() + "\"", result.getResponse().getContentAsString());
     }
 
     @Test
@@ -77,7 +77,7 @@ class AuthControllerTest {
         ResultActions resultActions = mockMvc.perform(requestBuilder);
         MvcResult result = resultActions.andExpect(status().isUnauthorized()).andReturn();
 
-        assertEquals("\"" + HttpError.WRONG_CREDENTIALS.getMessage() + "\"", result.getResponse().getContentAsString());
+        assertEquals("\"" + HttpErrorMessage.WRONG_CREDENTIALS.getMessage() + "\"", result.getResponse().getContentAsString());
     }
 
     @Test

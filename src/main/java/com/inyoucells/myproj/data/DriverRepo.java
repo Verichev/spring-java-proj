@@ -2,10 +2,13 @@ package com.inyoucells.myproj.data;
 
 import com.inyoucells.myproj.data.entity.DriverEntity;
 import com.inyoucells.myproj.data.jpa.DriverJpaRepository;
+import com.inyoucells.myproj.models.Car;
 import com.inyoucells.myproj.models.Driver;
-import com.inyoucells.myproj.models.HttpError;
-import com.inyoucells.myproj.models.ServiceError;
+import com.inyoucells.myproj.models.DriverStripped;
+import com.inyoucells.myproj.models.errors.HttpErrorMessage;
+import com.inyoucells.myproj.models.errors.ServiceError;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,24 +31,29 @@ public class DriverRepo {
         return driverJpaRepository
                 .findAllByUserId(userId)
                 .stream()
-                .map(driverEntity -> new Driver(driverEntity, true))
+                .map(this::mapToDriver)
                 .collect(Collectors.toList());
     }
 
-    public List<Driver> getDrivers(long userId) {
+    private Driver mapToDriver(DriverEntity driverEntity) {
+        List<Car> cars = driverEntity.getCars().stream().map(Car::new).collect(Collectors.toList());
+        return new Driver(driverEntity.getId(), driverEntity.getName(), driverEntity.getLicence(), cars);
+    }
+
+    public List<DriverStripped> getDrivers(long userId) {
         return driverJpaRepository
                 .findAllByUserId(userId)
                 .stream()
-                .map(driverEntity -> new Driver(driverEntity, false))
+                .map(DriverStripped::new)
                 .collect(Collectors.toList());
     }
 
     public void removeDriver(long userId, long driverId) throws ServiceError {
         Optional<DriverEntity> driver = driverJpaRepository.findById(driverId);
         if (driver.isEmpty()) {
-            throw new ServiceError(HttpError.BAD_REQUEST);
+            throw new ServiceError(HttpStatus.BAD_REQUEST, HttpErrorMessage.DRIVER_ID_NOT_FOUND);
         } else if (driver.get().getUserId() != userId) {
-            throw new ServiceError(HttpError.NOT_AUTHORISED);
+            throw new ServiceError(HttpStatus.UNAUTHORIZED, HttpErrorMessage.NOT_AUTHORISED);
         }
         driverJpaRepository.deleteById(driverId);
     }

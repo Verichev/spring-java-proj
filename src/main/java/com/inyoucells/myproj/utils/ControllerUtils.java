@@ -1,8 +1,9 @@
 package com.inyoucells.myproj.utils;
 
-import com.inyoucells.myproj.models.HttpError;
-import com.inyoucells.myproj.models.ServiceError;
-import com.inyoucells.myproj.models.TokenValidationResult;
+import com.inyoucells.myproj.models.ControllerResponse;
+import com.inyoucells.myproj.models.errors.ApiError;
+import com.inyoucells.myproj.models.errors.HttpErrorMessage;
+import com.inyoucells.myproj.models.errors.ServiceError;
 import com.inyoucells.myproj.service.auth.TokenValidator;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,40 +21,47 @@ public class ControllerUtils {
         this.tokenValidator = tokenValidator;
     }
 
-    public <T> ResponseEntity<Object> authorizedFunction(String token, ServiceFunction<Long, T> action) {
+    public <T extends ControllerResponse> ResponseEntity<ControllerResponse> authorizedFunction(String token, ServiceFunction<Long, T> action) {
         return rawAuthorizedFunction(token, userId -> {
             T result = action.apply(userId);
             return new ResponseEntity<>(result, HttpStatus.OK);
         });
     }
 
-    public ResponseEntity<Object> authorizedConsumer(String token, ServiceConsumer<Long> action) {
+    public ResponseEntity<ControllerResponse> authorizedConsumer(String token, ServiceConsumer<Long> action) {
         return rawAuthorizedFunction(token, userId -> {
             action.accept(userId);
             return new ResponseEntity<>(HttpStatus.OK);
         });
     }
 
-    public ResponseEntity<Object> rawAuthorizedFunction(String token, ServiceFunction<Long, ResponseEntity<Object>> action) {
-        TokenValidationResult validationResult = tokenValidator.check(token);
-        if (validationResult.getApiError() != HttpError.EMPTY) {
-            return new ResponseEntity<>(
-                    validationResult.getApiError(), validationResult.getApiError().getStatus());
-        }
+    public ResponseEntity<ControllerResponse> rawAuthorizedFunction(String token, ServiceFunction<Long, ResponseEntity<ControllerResponse>> action) {
         try {
-            return action.apply(validationResult.getUserId());
+            long userId = tokenValidator.parseUserId(token);
+            return action.apply(userId);
         } catch (Throwable exception) {
             log.error(exception);
-            return new ResponseEntity<>(exception instanceof ServiceError ? ((ServiceError) exception).getHttpError() : HttpError.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+            ApiError apiError = mapToApiError(exception);
+            return new ResponseEntity<>(apiError, apiError.getStatus());
         }
     }
 
-    public ResponseEntity<Object> rawUnauthorizedCallable(ServiceCallable<ResponseEntity<Object>> action) {
+    public ResponseEntity<ControllerResponse> rawUnauthorizedCallable(ServiceCallable<ResponseEntity<ControllerResponse>> action) {
         try {
             return action.call();
         } catch (Throwable exception) {
             log.error(exception);
-            return new ResponseEntity<>(exception instanceof ServiceError ? ((ServiceError) exception).getHttpError() : HttpError.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+            ApiError apiError = mapToApiError(exception);
+            return new ResponseEntity<>(apiError, apiError.getStatus());
+        }
+    }
+
+    private ApiError mapToApiError(Throwable throwable) {
+        if (throwable instanceof ServiceError) {
+            ServiceError serviceError = (ServiceError) throwable;
+            return new ApiError(serviceError.getHttpStatus(), serviceError.getHttpError());
+        } else {
+            return new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, HttpErrorMessage.SERVER_ERROR);
         }
     }
 

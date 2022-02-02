@@ -3,14 +3,15 @@ package com.inyoucells.myproj.data;
 import com.inyoucells.myproj.data.entity.DriverEntity;
 import com.inyoucells.myproj.data.jpa.DriverJpaRepository;
 import com.inyoucells.myproj.models.Driver;
-import com.inyoucells.myproj.models.HttpError;
-import com.inyoucells.myproj.models.ServiceError;
+import com.inyoucells.myproj.models.errors.HttpErrorMessage;
+import com.inyoucells.myproj.models.errors.ServiceError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -23,7 +24,6 @@ class DriverRepoTest {
     @Mock
     private DriverJpaRepository driverJpaRepository;
 
-    private final CarFakeProvider carFakeProvider = new CarFakeProvider(0);
     private DriverRepo driverRepo;
 
     @BeforeEach
@@ -35,7 +35,7 @@ class DriverRepoTest {
     void getDriversFull() {
         DriverEntity driverEntity = new DriverEntity("John", "licence1", 1);
         driverEntity.setCars(Collections.emptyList());
-        Driver driver = new Driver(driverEntity, true);
+        Driver driver = new Driver("John", "licence1");
         Mockito.doReturn(Collections.singletonList(driverEntity)).when(driverJpaRepository).findAllByUserId(10L);
         assertEquals(Collections.singletonList(driver), driverRepo.getDriversFull(10L));
     }
@@ -53,7 +53,7 @@ class DriverRepoTest {
         Mockito.doReturn(Optional.empty()).when(driverJpaRepository).findById(999L);
         ServiceError error = assertThrows(
                 ServiceError.class, () -> driverRepo.removeDriver(100, 999));
-        assertEquals(new ServiceError(HttpError.BAD_REQUEST), error);
+        assertEquals(new ServiceError(HttpStatus.BAD_REQUEST, HttpErrorMessage.DRIVER_ID_NOT_FOUND), error);
     }
 
     @Test
@@ -62,7 +62,7 @@ class DriverRepoTest {
         Mockito.doReturn(Optional.of(driverEntity)).when(driverJpaRepository).findById(999L);
         ServiceError error = assertThrows(
                 ServiceError.class, () -> driverRepo.removeDriver(100, 999));
-        assertEquals(new ServiceError(HttpError.NOT_AUTHORISED), error);
+        assertEquals(new ServiceError(HttpStatus.UNAUTHORIZED, HttpErrorMessage.NOT_AUTHORISED), error);
     }
 
     @Test

@@ -55,18 +55,18 @@ class UserRepoTest {
     void checkUser_notPresent() {
         Mockito.doReturn(Optional.empty()).when(userJpaRepository).findByEmailAndPassword("email", "pass");
 
-        Optional<String> token = userRepo.checkUser("email", "pass");
+        Optional<String> token = userRepo.loginUser("email", "pass");
         assertTrue(token.isEmpty());
     }
 
     @Test
-    void checkUser() {
+    void loginUser() {
         Mockito.doReturn("token1").when(userRepo).createToken(4);
         UserEntity userEntity = new UserEntity("email", "pass");
         userEntity.setId(4L);
         Mockito.doReturn(Optional.of(userEntity)).when(userJpaRepository).findByEmailAndPassword("email", "pass");
 
-        Optional<String> token = userRepo.checkUser("email", "pass");
+        Optional<String> token = userRepo.loginUser("email", "pass");
         assertTrue(token.isPresent());
         assertEquals("token1", token.get());
     }

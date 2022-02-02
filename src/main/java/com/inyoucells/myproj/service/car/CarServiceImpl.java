@@ -3,7 +3,7 @@ package com.inyoucells.myproj.service.car;
 import com.inyoucells.myproj.data.CarRepo;
 import com.inyoucells.myproj.data.DriverRepo;
 import com.inyoucells.myproj.models.Car;
-import com.inyoucells.myproj.models.ServiceError;
+import com.inyoucells.myproj.models.errors.ServiceError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
