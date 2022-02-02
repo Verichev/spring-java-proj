@@ -1,7 +1,7 @@
 package com.inyoucells.myproj.service.car;
 
 import com.inyoucells.myproj.models.Car;
-import com.inyoucells.myproj.models.ServiceError;
+import com.inyoucells.myproj.models.errors.ServiceError;
 
 import java.util.List;
 

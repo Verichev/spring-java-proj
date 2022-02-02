@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inyoucells.myproj.data.DriverFakeProvider;
 import com.inyoucells.myproj.data.DriverRepo;
 import com.inyoucells.myproj.models.Driver;
-import com.inyoucells.myproj.models.HttpError;
+import com.inyoucells.myproj.models.errors.HttpErrorMessage;
 import com.inyoucells.myproj.service.auth.AuthConsts;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,7 +53,7 @@ class DriverControllerTest {
         ResultActions resultActions = mockMvc.perform(requestBuilder);
         MvcResult result = resultActions.andExpect(status().isUnauthorized()).andReturn();
 
-        assertEquals("\"" + HttpError.AUTHORIZATION_IS_OUTDATED.getMessage() + "\"", result.getResponse().getContentAsString());
+        assertEquals("\"" + HttpErrorMessage.AUTHORIZATION_IS_OUTDATED.getMessage() + "\"", result.getResponse().getContentAsString());
     }
 
     @Test

@@ -37,10 +37,10 @@ class AuthServiceImplTest {
 
     @Test
     void signin() {
-        Mockito.doReturn(Optional.of("test")).when(userRepo).checkUser("email", "pass");
+        Mockito.doReturn(Optional.of("test")).when(userRepo).loginUser("email", "pass");
         Optional<String> result = authService.signin("email", "pass");
 
-        Mockito.verify(userRepo).checkUser("email", "pass");
+        Mockito.verify(userRepo).loginUser("email", "pass");
         assertTrue(result.isPresent());
         assertEquals("test", result.get());
     }

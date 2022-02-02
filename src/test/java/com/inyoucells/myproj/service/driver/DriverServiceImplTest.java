@@ -2,7 +2,8 @@ package com.inyoucells.myproj.service.driver;
 
 import com.inyoucells.myproj.data.DriverRepo;
 import com.inyoucells.myproj.models.Driver;
-import com.inyoucells.myproj.models.ServiceError;
+import com.inyoucells.myproj.models.DriverStripped;
+import com.inyoucells.myproj.models.errors.ServiceError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +31,7 @@ class DriverServiceImplTest {
     @Test
     void getDrivers() {
         Mockito.doReturn(Collections.emptyList()).when(driverRepo).getDrivers(-1);
-        List<Driver> result = driverService.getDrivers(-1);
+        List<DriverStripped> result = driverService.getDrivers(-1);
 
         Mockito.verify(driverRepo).getDrivers(-1);
         assertEquals(Collections.emptyList(), result);

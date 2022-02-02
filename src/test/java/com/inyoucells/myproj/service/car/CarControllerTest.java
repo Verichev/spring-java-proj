@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inyoucells.myproj.data.CarFakeProvider;
 import com.inyoucells.myproj.data.CarRepo;
 import com.inyoucells.myproj.models.Car;
-import com.inyoucells.myproj.models.HttpError;
+import com.inyoucells.myproj.models.errors.HttpErrorMessage;
 import com.inyoucells.myproj.service.auth.AuthConsts;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -53,7 +54,7 @@ class CarControllerTest {
         ResultActions resultActions = mockMvc.perform(requestBuilder);
         MvcResult result = resultActions.andExpect(status().isUnauthorized()).andReturn();
 
-        assertEquals("\"" + HttpError.AUTHORIZATION_IS_OUTDATED.getMessage() + "\"", result.getResponse().getContentAsString());
+        assertEquals("\"" + HttpErrorMessage.AUTHORIZATION_IS_OUTDATED.getMessage() + "\"", result.getResponse().getContentAsString());
     }
 
     @Test
@@ -137,7 +138,7 @@ class CarControllerTest {
     void addCar() throws Exception {
         String token = createValidToken();
         Car car1 = carFakeProvider.generateCar();
-        MockHttpServletRequestBuilder requestBuilder1 = post("/car")
+        MockHttpServletRequestBuilder requestBuilder1 = MockMvcRequestBuilders.post("/car")
                 .header("token", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(car1));
@@ -158,7 +159,7 @@ class CarControllerTest {
         ResultActions resultActions = mockMvc.perform(requestBuilder);
 
         MvcResult result = resultActions.andExpect(status().isBadRequest()).andReturn();
-        assertEquals("\"" + HttpError.MISSING_DRIVER_ID.getMessage() + "\"", result.getResponse().getContentAsString());
+        assertEquals("\"" + HttpErrorMessage.MISSING_DRIVER_ID.getMessage() + "\"", result.getResponse().getContentAsString());
     }
 
     private String createValidToken() {

@@ -26,7 +26,7 @@ public class UserRepo {
         return Optional.of(createToken(userEntity.getId()));
     }
 
-    public Optional<String> checkUser(String email, String pass) {
+    public Optional<String> loginUser(String email, String pass) {
         Optional<UserEntity> userOptional = userJpaRepository.findByEmailAndPassword(email, pass);
         if (userOptional.isEmpty()) {
             return Optional.empty();

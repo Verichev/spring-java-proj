@@ -3,7 +3,7 @@ package com.inyoucells.myproj.service.car;
 import com.inyoucells.myproj.data.CarFakeProvider;
 import com.inyoucells.myproj.data.CarRepo;
 import com.inyoucells.myproj.models.Car;
-import com.inyoucells.myproj.models.ServiceError;
+import com.inyoucells.myproj.models.errors.ServiceError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

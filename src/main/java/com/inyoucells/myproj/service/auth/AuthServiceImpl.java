@@ -23,6 +23,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public Optional<String> signin(String email, String pass) {
-        return userRepo.checkUser(email, pass);
+        return userRepo.loginUser(email, pass);
     }
 }

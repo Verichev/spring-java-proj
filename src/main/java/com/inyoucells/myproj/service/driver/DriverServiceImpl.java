@@ -2,7 +2,8 @@ package com.inyoucells.myproj.service.driver;
 
 import com.inyoucells.myproj.data.DriverRepo;
 import com.inyoucells.myproj.models.Driver;
-import com.inyoucells.myproj.models.ServiceError;
+import com.inyoucells.myproj.models.DriverStripped;
+import com.inyoucells.myproj.models.errors.ServiceError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public List<Driver> getDrivers(long userId) {
+    public List<DriverStripped> getDrivers(long userId) {
         return driverRepo.getDrivers(userId);
     }
 

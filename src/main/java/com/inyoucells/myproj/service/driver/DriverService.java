@@ -1,12 +1,13 @@
 package com.inyoucells.myproj.service.driver;
 
 import com.inyoucells.myproj.models.Driver;
-import com.inyoucells.myproj.models.ServiceError;
+import com.inyoucells.myproj.models.DriverStripped;
+import com.inyoucells.myproj.models.errors.ServiceError;
 
 import java.util.List;
 
 public interface DriverService {
-    List<Driver> getDrivers(long userId) throws ServiceError;
+    List<DriverStripped> getDrivers(long userId) throws ServiceError;
 
     List<Driver> getDriversFull(long userId) throws ServiceError;
 

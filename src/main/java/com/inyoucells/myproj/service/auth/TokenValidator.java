@@ -1,8 +1,9 @@
 package com.inyoucells.myproj.service.auth;
 
-import com.inyoucells.myproj.models.HttpError;
-import com.inyoucells.myproj.models.TokenValidationResult;
+import com.inyoucells.myproj.models.errors.HttpErrorMessage;
+import com.inyoucells.myproj.models.errors.ServiceError;
 import lombok.extern.log4j.Log4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -11,9 +12,9 @@ import java.util.Calendar;
 @Service
 public class TokenValidator {
 
-    public TokenValidationResult check(String token) {
+    public long parseUserId(String token) throws ServiceError {
         if (token.isEmpty()) {
-            return new TokenValidationResult(-1L, HttpError.WRONG_CREDENTIALS);
+            throw new ServiceError(HttpStatus.UNAUTHORIZED, HttpErrorMessage.WRONG_CREDENTIALS);
         }
         String[] sp = token.split("_");
         Calendar calendar = Calendar.getInstance();
@@ -31,10 +32,10 @@ public class TokenValidator {
             log.error(e);
         }
         if (userId == null || expired != null && calendar.getTimeInMillis() > expired) {
-            return new TokenValidationResult(null, HttpError.AUTHORIZATION_IS_OUTDATED);
+            throw new ServiceError(HttpStatus.UNAUTHORIZED, HttpErrorMessage.AUTHORIZATION_IS_OUTDATED);
 
         } else {
-            return new TokenValidationResult(userId, HttpError.EMPTY);
+            return userId;
         }
     }
 }
