@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CarServiceImpl implements CarService {
@@ -32,7 +33,19 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public long addCar(long userId, Car car) throws ServiceError {
+    public UUID addCar(long userId, Car car) throws ServiceError {
         return carRepo.addCar(userId, car);
+    }
+
+    public List<Car> searchByBrand(long userId, String keyword) {
+        return carRepo.searchByBrand(userId, keyword);
+    }
+
+    public List<Car> getCarsByYearAndBrand(long userId, String year, String brand) {
+        return carRepo.getCarsByYearAndBrand(userId, year, brand);
+    }
+
+    public List<Car> getCarsWitHorsepowerMore(long userId, int minHorsePower) {
+        return carRepo.getCarsWitHorsepowerMore(userId, minHorsePower);
     }
 }

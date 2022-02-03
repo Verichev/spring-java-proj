@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -17,8 +18,9 @@ import java.util.Objects;
 public class CarEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue
+    @Column(columnDefinition = "uuid", updatable = false)
+    private UUID uuid;
 
     private String brand;
     private String year;
@@ -31,11 +33,11 @@ public class CarEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CarEntity carEntity = (CarEntity) o;
-        return used == carEntity.used && horsepower == carEntity.horsepower && Objects.equals(id, carEntity.id) && Objects.equals(brand, carEntity.brand) && Objects.equals(year, carEntity.year) && Objects.equals(driverId, carEntity.driverId);
+        return uuid.equals(carEntity.uuid);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, brand, year, used, horsepower, driverId);
+        return Objects.hash(uuid);
     }
 }
