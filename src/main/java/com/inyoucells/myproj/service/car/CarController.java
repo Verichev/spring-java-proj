@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 import static com.inyoucells.myproj.utils.ResponseUtils.*;
 
 @RestController
@@ -39,9 +41,24 @@ public class CarController {
             if (car.getDriverId() == null) {
                 return withError(HttpStatus.BAD_REQUEST, HttpErrorMessage.MISSING_DRIVER_ID);
             } else {
-                long id = carService.addCar(userId, car);
+                UUID id = carService.addCar(userId, car);
                 return withPayload(id);
             }
         });
+    }
+
+    @GetMapping("/car/search/brand")
+    ResponseEntity<ControllerResponse> searchCarsByBrand(@RequestHeader String token, String keyword) {
+        return controllerUtils.authorizedFunction(token, userId -> basicPayload(carService.searchByBrand(userId, keyword)));
+    }
+
+    @GetMapping("/car/yearbrand")
+    ResponseEntity<ControllerResponse> getCarsByYearAndBrand(@RequestHeader String token, String year, String brand) {
+        return controllerUtils.authorizedFunction(token, userId -> basicPayload(carService.getCarsByYearAndBrand(userId, year, brand)));
+    }
+
+    @GetMapping("/car/morehorsepower")
+    ResponseEntity<ControllerResponse> getCarsWitHorsepowerMore(@RequestHeader String token, Integer minHorsePower) {
+        return controllerUtils.authorizedFunction(token, userId -> basicPayload(carService.getCarsWitHorsepowerMore(userId, minHorsePower)));
     }
 }

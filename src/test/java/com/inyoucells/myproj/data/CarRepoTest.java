@@ -3,6 +3,7 @@ package com.inyoucells.myproj.data;
 import com.inyoucells.myproj.data.entity.CarEntity;
 import com.inyoucells.myproj.data.entity.DriverEntity;
 import com.inyoucells.myproj.data.jpa.CarJpaRepository;
+import com.inyoucells.myproj.data.jpa.CustomCarRepo;
 import com.inyoucells.myproj.data.jpa.DriverJpaRepository;
 import com.inyoucells.myproj.models.Car;
 import com.inyoucells.myproj.models.errors.HttpErrorMessage;
@@ -28,13 +29,15 @@ class CarRepoTest {
     private CarJpaRepository carJpaRepository;
     @Mock
     private DriverJpaRepository driverJpaRepository;
+    @Mock
+    private CustomCarRepo customCarRepo;
 
     private CarRepo carRepo;
     private CarFakeProvider carFakeProvider;
 
     @BeforeEach
     void setup() {
-        carRepo = new CarRepo(carJpaRepository, driverJpaRepository);
+        carRepo = new CarRepo(carJpaRepository, driverJpaRepository, customCarRepo);
         carFakeProvider = new CarFakeProvider(0);
     }
 
@@ -136,7 +139,7 @@ class CarRepoTest {
         CarEntity carEntity = new CarEntity(car.getId(), car.getBrand(), car.getYear(), car.isUsed(), car.getHorsepower(), car.getDriverId());
         Mockito.doReturn(carEntity).when(carJpaRepository).save(carEntity);
         Mockito.doReturn(Optional.of(driverWithId(1000L))).when(driverJpaRepository).findById(car.getDriverId());
-        Long id = assertDoesNotThrow(() -> carRepo.addCar(1000L, car));
+        assertDoesNotThrow(() -> carRepo.addCar(1000L, car));
         Mockito.verify(carJpaRepository).save(carEntity);
     }
 
