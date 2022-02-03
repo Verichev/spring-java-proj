@@ -1,6 +1,7 @@
 package com.inyoucells.myproj.data;
 
 import com.inyoucells.myproj.data.entity.CarEntity;
+import com.inyoucells.myproj.data.entity.DriverEntity;
 import com.inyoucells.myproj.data.jpa.CarJpaRepository;
 import com.inyoucells.myproj.data.jpa.DriverJpaRepository;
 import com.inyoucells.myproj.models.Car;
@@ -26,10 +27,10 @@ public class CarRepo {
     }
 
     public List<Car> getCars(long userId, long driverId) throws ServiceError {
-        Optional<Long> driverUserId = driverJpaRepository.findUserIdById(driverId);
+        Optional<DriverEntity> driverUserId = driverJpaRepository.findById(driverId);
         if (driverUserId.isEmpty()) {
             throw new ServiceError(HttpStatus.BAD_REQUEST, HttpErrorMessage.DRIVER_ID_NOT_FOUND);
-        } else if (driverUserId.get() != userId) {
+        } else if (driverUserId.get().getUserId() != userId) {
             throw new ServiceError(HttpStatus.UNAUTHORIZED, HttpErrorMessage.NOT_AUTHORISED);
         }
         return carJpaRepository.findAllByDriverId(driverId).stream().map(Car::new).collect(Collectors.toList());
@@ -40,8 +41,8 @@ public class CarRepo {
         if (carEntity.isEmpty()) {
             throw new ServiceError(HttpStatus.BAD_REQUEST, HttpErrorMessage.CAR_ID_NOT_FOUND);
         } else {
-            Optional<Long> driverUserId = driverJpaRepository.findUserIdById(carEntity.get().getDriverId());
-            if (driverUserId.isEmpty() || driverUserId.get() != userId) {
+            Optional<DriverEntity> driverUserId = driverJpaRepository.findById(carEntity.get().getDriverId());
+            if (driverUserId.isEmpty() || driverUserId.get().getUserId() != userId) {
                 throw new ServiceError(HttpStatus.UNAUTHORIZED, HttpErrorMessage.NOT_AUTHORISED);
             }
         }
@@ -49,20 +50,20 @@ public class CarRepo {
     }
 
     public void removeCarsWithDriverId(long userId, long driverId) throws ServiceError {
-        Optional<Long> driverUserId = driverJpaRepository.findUserIdById(driverId);
+        Optional<DriverEntity> driverUserId = driverJpaRepository.findById(driverId);
         if (driverUserId.isEmpty()) {
             throw new ServiceError(HttpStatus.BAD_REQUEST, HttpErrorMessage.DRIVER_ID_NOT_FOUND);
-        } else if (driverUserId.get() != userId) {
+        } else if (driverUserId.get().getUserId() != userId) {
             throw new ServiceError(HttpStatus.UNAUTHORIZED, HttpErrorMessage.NOT_AUTHORISED);
         }
         carJpaRepository.deleteByDriverId(driverId);
     }
 
     public long addCar(long userId, Car car) throws ServiceError {
-        Optional<Long> driverUserId = driverJpaRepository.findUserIdById(car.getDriverId());
+        Optional<DriverEntity> driverUserId = driverJpaRepository.findById(car.getDriverId());
         if (driverUserId.isEmpty()) {
             throw new ServiceError(HttpStatus.BAD_REQUEST, HttpErrorMessage.DRIVER_ID_NOT_FOUND);
-        } else if (driverUserId.get() != userId) {
+        } else if (driverUserId.get().getUserId() != userId) {
             throw new ServiceError(HttpStatus.UNAUTHORIZED, HttpErrorMessage.NOT_AUTHORISED);
         }
         CarEntity result = carJpaRepository.save(new CarEntity(car.getId(), car.getBrand(), car.getYear(), car.isUsed(), car.getHorsepower(), car.getDriverId()));

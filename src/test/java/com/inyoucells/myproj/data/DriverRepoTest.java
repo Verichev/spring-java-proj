@@ -3,6 +3,7 @@ package com.inyoucells.myproj.data;
 import com.inyoucells.myproj.data.entity.DriverEntity;
 import com.inyoucells.myproj.data.jpa.DriverJpaRepository;
 import com.inyoucells.myproj.models.Driver;
+import com.inyoucells.myproj.models.DriverDetail;
 import com.inyoucells.myproj.models.errors.HttpErrorMessage;
 import com.inyoucells.myproj.models.errors.ServiceError;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 
 import java.util.Collections;
@@ -35,17 +38,20 @@ class DriverRepoTest {
     void getDriversFull() {
         DriverEntity driverEntity = new DriverEntity("John", "licence1", 1);
         driverEntity.setCars(Collections.emptyList());
-        Driver driver = new Driver("John", "licence1");
-        Mockito.doReturn(Collections.singletonList(driverEntity)).when(driverJpaRepository).findAllByUserId(10L);
-        assertEquals(Collections.singletonList(driver), driverRepo.getDriversFull(10L));
+        DriverDetail driver = new DriverDetail("John", "licence1");
+        driver.setCars(Collections.emptyList());
+        Pageable pageable = PageRequest.of(0, 10);
+        Mockito.doReturn(Collections.singletonList(driverEntity)).when(driverJpaRepository).findAllByUserId(10L, pageable);
+        assertEquals(Collections.singletonList(driver), driverRepo.getDriversFull(10L, 0, 10));
     }
 
     @Test
     void getDrivers() {
         Driver driver = new Driver("John", "licence1");
         DriverEntity driverEntity = new DriverEntity("John", "licence1", 1);
-        Mockito.doReturn(Collections.singletonList(driverEntity)).when(driverJpaRepository).findAllByUserId(10L);
-        assertEquals(Collections.singletonList(driver), driverRepo.getDrivers(10L));
+        Pageable pageable = PageRequest.of(0, 10);
+        Mockito.doReturn(Collections.singletonList(driverEntity)).when(driverJpaRepository).findAllByUserId(10L, pageable);
+        assertEquals(Collections.singletonList(driver), driverRepo.getDrivers(10L, 0, 10));
     }
 
     @Test
