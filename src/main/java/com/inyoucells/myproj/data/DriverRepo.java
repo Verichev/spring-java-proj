@@ -4,10 +4,12 @@ import com.inyoucells.myproj.data.entity.DriverEntity;
 import com.inyoucells.myproj.data.jpa.DriverJpaRepository;
 import com.inyoucells.myproj.models.Car;
 import com.inyoucells.myproj.models.Driver;
-import com.inyoucells.myproj.models.DriverStripped;
+import com.inyoucells.myproj.models.DriverDetail;
 import com.inyoucells.myproj.models.errors.HttpErrorMessage;
 import com.inyoucells.myproj.models.errors.ServiceError;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,24 +29,26 @@ public class DriverRepo {
     }
 
     @Transactional
-    public List<Driver> getDriversFull(long userId) {
+    public List<DriverDetail> getDriversFull(long userId, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
         return driverJpaRepository
-                .findAllByUserId(userId)
+                .findAllByUserId(userId, pageable)
                 .stream()
                 .map(this::mapToDriver)
                 .collect(Collectors.toList());
     }
 
-    private Driver mapToDriver(DriverEntity driverEntity) {
+    private DriverDetail mapToDriver(DriverEntity driverEntity) {
         List<Car> cars = driverEntity.getCars().stream().map(Car::new).collect(Collectors.toList());
-        return new Driver(driverEntity.getId(), driverEntity.getName(), driverEntity.getLicence(), cars);
+        return new DriverDetail(driverEntity.getId(), driverEntity.getName(), driverEntity.getLicence(), cars);
     }
 
-    public List<DriverStripped> getDrivers(long userId) {
+    public List<Driver> getDrivers(long userId, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
         return driverJpaRepository
-                .findAllByUserId(userId)
+                .findAllByUserId(userId, pageable)
                 .stream()
-                .map(DriverStripped::new)
+                .map(Driver::new)
                 .collect(Collectors.toList());
     }
 

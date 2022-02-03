@@ -2,7 +2,7 @@ package com.inyoucells.myproj.service.driver;
 
 import com.inyoucells.myproj.data.DriverRepo;
 import com.inyoucells.myproj.models.Driver;
-import com.inyoucells.myproj.models.DriverStripped;
+import com.inyoucells.myproj.models.DriverDetail;
 import com.inyoucells.myproj.models.errors.ServiceError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,19 +30,19 @@ class DriverServiceImplTest {
 
     @Test
     void getDrivers() {
-        Mockito.doReturn(Collections.emptyList()).when(driverRepo).getDrivers(-1);
-        List<DriverStripped> result = driverService.getDrivers(-1);
+        Mockito.doReturn(Collections.emptyList()).when(driverRepo).getDrivers(-1, 0, 10);
+        List<Driver> result = driverService.getDrivers(-1, 0, 10);
 
-        Mockito.verify(driverRepo).getDrivers(-1);
+        Mockito.verify(driverRepo).getDrivers(-1, 0, 10);
         assertEquals(Collections.emptyList(), result);
     }
 
     @Test
     void getDriversFull() {
-        Mockito.doReturn(Collections.emptyList()).when(driverRepo).getDriversFull(-1);
-        List<Driver> result = driverService.getDriversFull(-1);
+        Mockito.doReturn(Collections.emptyList()).when(driverRepo).getDriversFull(-1, 0, 10);
+        List<DriverDetail> result = driverService.getDriversFull(-1, 0, 10);
 
-        Mockito.verify(driverRepo).getDriversFull(-1);
+        Mockito.verify(driverRepo).getDriversFull(-1, 0, 10);
         assertEquals(Collections.emptyList(), result);
     }
 
