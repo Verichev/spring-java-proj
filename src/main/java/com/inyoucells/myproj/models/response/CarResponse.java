@@ -1,7 +1,6 @@
 package com.inyoucells.myproj.models.response;
 
 import com.inyoucells.myproj.models.Car;
-import com.inyoucells.myproj.models.ControllerResponse;
 
 import java.util.List;
 
@@ -12,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CarResponse implements ControllerResponse {
+public class CarResponse {
     private List<Car> cars;
 }

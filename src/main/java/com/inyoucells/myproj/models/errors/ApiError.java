@@ -1,11 +1,11 @@
 package com.inyoucells.myproj.models.errors;
 
-import com.inyoucells.myproj.models.ControllerResponse;
-import lombok.Data;
 import org.springframework.http.HttpStatus;
 
+import lombok.Data;
+
 @Data
-public class ApiError implements ControllerResponse {
+public class ApiError {
 
     private HttpStatus status;
     private HttpErrorMessage message;
