@@ -1,11 +1,13 @@
 package com.inyoucells.myproj.data.jpa;
 
 import com.inyoucells.myproj.data.entity.CarEntity;
+
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import java.util.List;
 
 @Repository
 public class CustomCarRepo {
@@ -17,7 +19,7 @@ public class CustomCarRepo {
     }
 
     public List<CarEntity> selectCarsWitHorsepowerMore(int horsepower) {
-        String request = "SELECT * FROM car_entity e WHERE e.horsepower > :hp";
+        String request = "SELECT e FROM CarEntity e WHERE e.horsepower >= :hp";
         TypedQuery<CarEntity> query = entityManager.createQuery(request, CarEntity.class);
         query.setParameter("hp", horsepower);
         return query.getResultList();

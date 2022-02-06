@@ -9,7 +9,7 @@ import java.util.UUID;
 public interface CarService {
     List<Car> getCars(long userId, long driverId) throws ServiceError;
 
-    void removeCar(long userId, long id) throws ServiceError;
+    void removeCar(long userId, UUID id) throws ServiceError;
 
     UUID addCar(long userId, Car car) throws ServiceError;
 

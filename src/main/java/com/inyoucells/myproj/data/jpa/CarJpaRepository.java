@@ -1,14 +1,16 @@
 package com.inyoucells.myproj.data.jpa;
 
 import com.inyoucells.myproj.data.entity.CarEntity;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface CarJpaRepository extends JpaRepository<CarEntity, Long> {
+public interface CarJpaRepository extends JpaRepository<CarEntity, UUID> {
     void deleteByDriverId(Long driverId);
 
     List<CarEntity> findAllByDriverId(Long driverId);
@@ -19,6 +21,6 @@ public interface CarJpaRepository extends JpaRepository<CarEntity, Long> {
     List<CarEntity> findByYearAndBrand(String year, String brand);
 
     @Query(
-            value = "SELECT c FROM CarEntity c WHERE c.brand LIKE '%keyword%'")
+            value = "SELECT c FROM CarEntity c WHERE c.brand LIKE CONCAT('%',:keyword,'%')")
     List<CarEntity> searchCarsByBrand(String keyword);
 }

@@ -4,6 +4,7 @@ import com.inyoucells.myproj.data.CarRepo;
 import com.inyoucells.myproj.data.DriverRepo;
 import com.inyoucells.myproj.models.Car;
 import com.inyoucells.myproj.models.errors.ServiceError;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public void removeCar(long userId, long carId) throws ServiceError {
+    public void removeCar(long userId, UUID carId) throws ServiceError {
         carRepo.removeCar(userId, carId);
     }
 

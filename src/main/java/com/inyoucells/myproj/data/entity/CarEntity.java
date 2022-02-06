@@ -1,13 +1,18 @@
 package com.inyoucells.myproj.data.entity;
 
+import java.util.Objects;
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.*;
-import java.util.Objects;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -33,7 +38,7 @@ public class CarEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CarEntity carEntity = (CarEntity) o;
-        return uuid.equals(carEntity.uuid);
+        return Objects.equals(uuid, carEntity.uuid);
     }
 
     @Override

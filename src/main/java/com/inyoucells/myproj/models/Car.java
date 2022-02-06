@@ -1,9 +1,10 @@
 package com.inyoucells.myproj.models;
 
 import com.inyoucells.myproj.data.entity.CarEntity;
-import lombok.Data;
 
 import java.util.UUID;
+
+import lombok.Data;
 
 @Data
 public class Car {
