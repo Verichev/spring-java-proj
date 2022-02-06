@@ -1,9 +1,15 @@
 package com.inyoucells.myproj.service.auth;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inyoucells.myproj.data.UserRepo;
 import com.inyoucells.myproj.models.errors.ApiError;
 import com.inyoucells.myproj.models.errors.HttpErrorMessage;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +20,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -41,7 +42,7 @@ class AuthControllerTest {
     @Test
     void signup_alreadyRegistered() throws Exception {
         userRepo.addUser("testEmail", "somepass");
-        MockHttpServletRequestBuilder requestBuilder = get("/signup")
+        MockHttpServletRequestBuilder requestBuilder = get("/auth/signup")
                 .param("email", "testEmail")
                 .param("pass", "otherpass");
         ResultActions resultActions = mockMvc.perform(requestBuilder);
@@ -53,7 +54,7 @@ class AuthControllerTest {
 
     @Test
     void signup() throws Exception {
-        MockHttpServletRequestBuilder requestBuilder = get("/signup")
+        MockHttpServletRequestBuilder requestBuilder = get("/auth/signup")
                 .param("email", "testEmail")
                 .param("pass", "otherpass");
         ResultActions resultActions = mockMvc.perform(requestBuilder);
@@ -65,7 +66,7 @@ class AuthControllerTest {
     @Test
     void signin_nonFound() throws Exception {
         userRepo.addUser("testEmail", "somepass");
-        MockHttpServletRequestBuilder requestBuilder = get("/authorize")
+        MockHttpServletRequestBuilder requestBuilder = get("/auth/login")
                 .param("email", "testEmail1")
                 .param("pass", "somepass");
         ResultActions resultActions = mockMvc.perform(requestBuilder);
@@ -77,7 +78,7 @@ class AuthControllerTest {
     @Test
     void signin_wrongPass() throws Exception {
         userRepo.addUser("testEmail", "somepass");
-        MockHttpServletRequestBuilder requestBuilder = get("/authorize")
+        MockHttpServletRequestBuilder requestBuilder = get("/auth/login")
                 .param("email", "testEmail")
                 .param("pass", "somepass1");
         ResultActions resultActions = mockMvc.perform(requestBuilder);
@@ -89,7 +90,7 @@ class AuthControllerTest {
     @Test
     void signin() throws Exception {
         userRepo.addUser("testEmail", "somepass");
-        MockHttpServletRequestBuilder requestBuilder = get("/authorize")
+        MockHttpServletRequestBuilder requestBuilder = get("/auth/login")
                 .param("email", "testEmail")
                 .param("pass", "somepass");
         ResultActions resultActions = mockMvc.perform(requestBuilder);

@@ -10,11 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
-@RestController("auth")
+@RestController
+@RequestMapping("auth")
 public class AuthController {
 
     private final AuthService authService;
@@ -34,7 +36,7 @@ public class AuthController {
         }
     }
 
-    @GetMapping(path = "/authorize")
+    @GetMapping(path = "/login")
     ResponseEntity<TokenResponse> signin(String email, String pass) {
         Optional<String> token = authService.signin(email, pass);
         if (token.isEmpty()) {
