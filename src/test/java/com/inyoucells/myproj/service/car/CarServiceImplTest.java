@@ -1,9 +1,12 @@
 package com.inyoucells.myproj.service.car;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.inyoucells.myproj.data.CarFakeProvider;
 import com.inyoucells.myproj.data.CarRepo;
 import com.inyoucells.myproj.models.Car;
 import com.inyoucells.myproj.models.errors.ServiceError;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,8 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.UUID;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -41,9 +43,10 @@ class CarServiceImplTest {
 
     @Test
     void removeCar() throws ServiceError {
-        carService.removeCar(10, 3);
+        UUID uuid = UUID.randomUUID();
+        carService.removeCar(10, uuid);
 
-        Mockito.verify(carRepo).removeCar(10, 3);
+        Mockito.verify(carRepo).removeCar(10, uuid);
     }
 
     @Test

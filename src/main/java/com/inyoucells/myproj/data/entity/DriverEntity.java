@@ -1,13 +1,23 @@
 package com.inyoucells.myproj.data.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.util.List;
+import java.util.Objects;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.*;
-import java.util.List;
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -23,7 +33,8 @@ public class DriverEntity {
     private String name;
     private String licence;
 
-    private long userId;
+    private Long userId;
+
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -41,7 +52,8 @@ public class DriverEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DriverEntity that = (DriverEntity) o;
-        return userId == that.userId && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(licence, that.licence) && Objects.equals(cars, that.cars);
+        return Objects.equals(userId, that.userId) && Objects.equals(id, that.id) && Objects.equals(name,
+                that.name) && Objects.equals(licence, that.licence) && Objects.equals(cars, that.cars);
     }
 
     @Override

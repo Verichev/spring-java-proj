@@ -1,5 +1,9 @@
 package com.inyoucells.myproj.data;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import com.inyoucells.myproj.data.entity.CarEntity;
 import com.inyoucells.myproj.data.entity.DriverEntity;
 import com.inyoucells.myproj.data.jpa.CarJpaRepository;
@@ -8,6 +12,7 @@ import com.inyoucells.myproj.data.jpa.DriverJpaRepository;
 import com.inyoucells.myproj.models.Car;
 import com.inyoucells.myproj.models.errors.HttpErrorMessage;
 import com.inyoucells.myproj.models.errors.ServiceError;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,8 +24,7 @@ import org.springframework.http.HttpStatus;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
 class CarRepoTest {
@@ -31,6 +35,8 @@ class CarRepoTest {
     private DriverJpaRepository driverJpaRepository;
     @Mock
     private CustomCarRepo customCarRepo;
+
+    UUID uuid = UUID.randomUUID();
 
     private CarRepo carRepo;
     private CarFakeProvider carFakeProvider;
@@ -71,16 +77,16 @@ class CarRepoTest {
     void removeCar() {
         Car car = carFakeProvider.generateCar();
         CarEntity carEntity = new CarEntity(car.getId(), car.getBrand(), car.getYear(), car.isUsed(), car.getHorsepower(), car.getDriverId());
-        Mockito.doReturn(Optional.of(carEntity)).when(carJpaRepository).findById(999L);
+        Mockito.doReturn(Optional.of(carEntity)).when(carJpaRepository).findById(uuid);
         Mockito.doReturn(Optional.of(driverWithId(1000L))).when(driverJpaRepository).findById(carEntity.getDriverId());
-        assertDoesNotThrow(() -> carRepo.removeCar(1000, 999));
+        assertDoesNotThrow(() -> carRepo.removeCar(1000, uuid));
         Mockito.verify(carJpaRepository).delete(carEntity);
     }
 
     @Test
     void removeCar_carNotFound() {
-        Mockito.doReturn(Optional.empty()).when(carJpaRepository).findById(999L);
-        ServiceError serviceError = assertThrows(ServiceError.class, () -> carRepo.removeCar(1000, 999));
+        Mockito.doReturn(Optional.empty()).when(carJpaRepository).findById(uuid);
+        ServiceError serviceError = assertThrows(ServiceError.class, () -> carRepo.removeCar(1000, uuid));
         assertEquals(new ServiceError(HttpStatus.BAD_REQUEST, HttpErrorMessage.CAR_ID_NOT_FOUND), serviceError);
     }
 
@@ -88,9 +94,9 @@ class CarRepoTest {
     void removeCar_userIdDoesntMatch() {
         Car car = carFakeProvider.generateCar();
         CarEntity carEntity = new CarEntity(car.getId(), car.getBrand(), car.getYear(), car.isUsed(), car.getHorsepower(), car.getDriverId());
-        Mockito.doReturn(Optional.of(carEntity)).when(carJpaRepository).findById(999L);
+        Mockito.doReturn(Optional.of(carEntity)).when(carJpaRepository).findById(uuid);
         Mockito.doReturn(Optional.of(driverWithId(1000L))).when(driverJpaRepository).findById(carEntity.getDriverId());
-        ServiceError serviceError = assertThrows(ServiceError.class, () -> carRepo.removeCar(100L, 999L));
+        ServiceError serviceError = assertThrows(ServiceError.class, () -> carRepo.removeCar(100L, uuid));
         assertEquals(HttpErrorMessage.NOT_AUTHORISED, serviceError.getHttpError());
     }
 

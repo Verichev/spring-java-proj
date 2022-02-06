@@ -8,6 +8,7 @@ import com.inyoucells.myproj.data.jpa.DriverJpaRepository;
 import com.inyoucells.myproj.models.Car;
 import com.inyoucells.myproj.models.errors.HttpErrorMessage;
 import com.inyoucells.myproj.models.errors.ServiceError;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -52,7 +53,7 @@ public class CarRepo {
         return carJpaRepository.findAllByDriverId(driverId).stream().map(Car::new).collect(Collectors.toList());
     }
 
-    public void removeCar(long userId, long carId) throws ServiceError {
+    public void removeCar(long userId, UUID carId) throws ServiceError {
         Optional<CarEntity> carEntity = carJpaRepository.findById(carId);
         if (carEntity.isEmpty()) {
             throw new ServiceError(HttpStatus.BAD_REQUEST, HttpErrorMessage.CAR_ID_NOT_FOUND);
