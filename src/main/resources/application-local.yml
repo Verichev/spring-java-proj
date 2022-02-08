@@ -1,0 +1,3 @@
+weather.apiKey: 495e960f24bacce62edfcc8806bc13bb
+weather.schedulerDelay: 5000
+weather.schedulerInterval: 20000
