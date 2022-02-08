@@ -11,19 +11,24 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {ServiceError.class})
     protected ResponseEntity<ApiError> handleException(
             ServiceError serviceError, WebRequest request) {
+        log.error(serviceError.getMessage(), serviceError);
         ApiError apiError = new ApiError(serviceError.getHttpStatus(), serviceError.getHttpError());
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
 
-    @ExceptionHandler(value = {Exception.class})
+    @ExceptionHandler(value = {Throwable.class})
     protected ResponseEntity<ApiError> handleGeneralException(
-            Exception exception, WebRequest request) {
+            Throwable throwable, WebRequest request) {
+        log.error(throwable.getMessage(), throwable);
         ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, HttpErrorMessage.SERVER_ERROR);
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }

@@ -9,3 +9,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: ljqperpe7j^834
+
+weather.apiKey: 495e960f24bacce62edfcc8806bc13bb
+weather.schedulerDelay: 1000
+weather.schedulerInterval: 5000
