@@ -15,6 +15,12 @@ public class ServiceError extends RuntimeException {
         this.httpError = httpError;
     }
 
+    public ServiceError(TypicalError typicalError) {
+        super(typicalError.getMessage().getMessage());
+        this.httpStatus = typicalError.getStatus();
+        this.httpError = typicalError.getMessage();
+    }
+
     public HttpErrorMessage getHttpError() {
         return httpError;
     }

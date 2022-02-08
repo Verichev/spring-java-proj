@@ -1,7 +1,6 @@
 package com.inyoucells.myproj.service.car;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -34,7 +33,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -71,11 +69,10 @@ class CarControllerTest {
         carRepo.clean();
         carFakeProvider.reset();
         userRepo.clean();
-        Optional<String> token = userRepo.addUser("testEmail", "pass");
-        assertTrue(token.isPresent());
-        long userId = tokenValidator.parseUserId(token.get());
+        String token = userRepo.addUser("testEmail", "pass");
+        long userId = tokenValidator.parseUserId(token);
         this.driverId = driverRepo.addDriver(userId, new Driver("name", "licence"));
-        this.token = token.get();
+        this.token = token;
     }
 
     @Test

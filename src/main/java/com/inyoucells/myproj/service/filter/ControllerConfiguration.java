@@ -17,7 +17,7 @@ public class ControllerConfiguration {
                 = new FilterRegistrationBean<>();
 
         registrationBean.setFilter(new AuthTokenFilter(tokenValidator, handlerExceptionResolver));
-        registrationBean.addUrlPatterns("/driver/**", "/car/**");
+        registrationBean.addUrlPatterns("/driver/*", "/car/*");
         registrationBean.setOrder(1);
 
         return registrationBean;

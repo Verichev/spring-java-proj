@@ -1,7 +1,13 @@
 package com.inyoucells.myproj.data;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import com.inyoucells.myproj.data.entity.UserEntity;
 import com.inyoucells.myproj.data.jpa.UserJpaRepository;
+import com.inyoucells.myproj.models.errors.ServiceError;
+import com.inyoucells.myproj.models.errors.TypicalError;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,9 +16,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 class UserRepoTest {
@@ -33,8 +36,8 @@ class UserRepoTest {
         userEntity.setId(4L);
         Mockito.doReturn(Optional.of(userEntity)).when(userJpaRepository).findByEmail("email");
 
-        Optional<String> token = userRepo.addUser("email", "pass");
-        assertTrue(token.isEmpty());
+        ServiceError serviceError = assertThrows(ServiceError.class, () -> userRepo.addUser("email", "pass"));
+        assertEquals(new ServiceError(TypicalError.EMAIL_IS_ALREADY_TAKEN), serviceError);
     }
 
     @Test
@@ -46,17 +49,16 @@ class UserRepoTest {
         Mockito.doReturn(Optional.empty()).when(userJpaRepository).findByEmail("email");
         Mockito.doReturn(savedUserEntity).when(userJpaRepository).save(userEntity);
 
-        Optional<String> token = userRepo.addUser("email", "pass");
-        assertTrue(token.isPresent());
-        assertEquals("token1", token.get());
+        String token = userRepo.addUser("email", "pass");
+        assertEquals("token1", token);
     }
 
     @Test
     void checkUser_notPresent() {
         Mockito.doReturn(Optional.empty()).when(userJpaRepository).findByEmailAndPassword("email", "pass");
 
-        Optional<String> token = userRepo.loginUser("email", "pass");
-        assertTrue(token.isEmpty());
+        ServiceError serviceError = assertThrows(ServiceError.class, () -> userRepo.loginUser("email", "pass"));
+        assertEquals(new ServiceError(TypicalError.WRONG_CREDENTIALS), serviceError);
     }
 
     @Test
@@ -66,9 +68,8 @@ class UserRepoTest {
         userEntity.setId(4L);
         Mockito.doReturn(Optional.of(userEntity)).when(userJpaRepository).findByEmailAndPassword("email", "pass");
 
-        Optional<String> token = userRepo.loginUser("email", "pass");
-        assertTrue(token.isPresent());
-        assertEquals("token1", token.get());
+        String token = userRepo.loginUser("email", "pass");
+        assertEquals("token1", token);
     }
 
     @Test
