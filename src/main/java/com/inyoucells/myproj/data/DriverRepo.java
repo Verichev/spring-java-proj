@@ -5,12 +5,12 @@ import com.inyoucells.myproj.data.jpa.DriverJpaRepository;
 import com.inyoucells.myproj.models.Car;
 import com.inyoucells.myproj.models.Driver;
 import com.inyoucells.myproj.models.DriverDetail;
-import com.inyoucells.myproj.models.errors.HttpErrorMessage;
 import com.inyoucells.myproj.models.errors.ServiceError;
+import com.inyoucells.myproj.models.errors.TypicalError;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,9 +55,9 @@ public class DriverRepo {
     public void removeDriver(long userId, long driverId) throws ServiceError {
         Optional<DriverEntity> driver = driverJpaRepository.findById(driverId);
         if (driver.isEmpty()) {
-            throw new ServiceError(HttpStatus.BAD_REQUEST, HttpErrorMessage.DRIVER_ID_NOT_FOUND);
+            throw new ServiceError(TypicalError.DRIVER_ID_NOT_FOUND);
         } else if (driver.get().getUserId() != userId) {
-            throw new ServiceError(HttpStatus.UNAUTHORIZED, HttpErrorMessage.NOT_AUTHORISED);
+            throw new ServiceError(TypicalError.NOT_AUTHORISED);
         }
         driverJpaRepository.deleteById(driverId);
     }

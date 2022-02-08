@@ -2,7 +2,10 @@ package com.inyoucells.myproj.data;
 
 import com.inyoucells.myproj.data.entity.UserEntity;
 import com.inyoucells.myproj.data.jpa.UserJpaRepository;
+import com.inyoucells.myproj.models.errors.ServiceError;
+import com.inyoucells.myproj.models.errors.TypicalError;
 import com.inyoucells.myproj.service.auth.AuthConsts;
+
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -17,22 +20,18 @@ public class UserRepo {
         this.userJpaRepository = userJpaRepository;
     }
 
-    public Optional<String> addUser(String email, String pass) {
+    public String addUser(String email, String pass) {
         Optional<UserEntity> userOptional = userJpaRepository.findByEmail(email);
         if (userOptional.isPresent()) {
-            return Optional.empty();
+            throw new ServiceError(TypicalError.EMAIL_IS_ALREADY_TAKEN);
         }
         UserEntity userEntity = userJpaRepository.save(new UserEntity(email, pass));
-        return Optional.of(createToken(userEntity.getId()));
+        return createToken(userEntity.getId());
     }
 
-    public Optional<String> loginUser(String email, String pass) {
-        Optional<UserEntity> userOptional = userJpaRepository.findByEmailAndPassword(email, pass);
-        if (userOptional.isEmpty()) {
-            return Optional.empty();
-        } else {
-            return Optional.of(createToken(userOptional.get().getId()));
-        }
+    public String loginUser(String email, String pass) {
+        return createToken(userJpaRepository.findByEmailAndPassword(email, pass)
+                .orElseThrow(() -> new ServiceError(TypicalError.WRONG_CREDENTIALS)).getId());
     }
 
     public void removeUser(long userId) {

@@ -1,5 +1,12 @@
 package com.inyoucells.myproj.service.driver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inyoucells.myproj.data.DriverFakeProvider;
 import com.inyoucells.myproj.data.DriverRepo;
@@ -9,6 +16,7 @@ import com.inyoucells.myproj.models.errors.ApiError;
 import com.inyoucells.myproj.models.errors.HttpErrorMessage;
 import com.inyoucells.myproj.models.response.AddDriverResponse;
 import com.inyoucells.myproj.models.response.DriverResponse;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +32,8 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -194,8 +196,7 @@ class DriverControllerTest {
 
     private String createValidToken() {
         userRepo.clean();
-        Optional<String> token = userRepo.addUser("testEmail", "pass");
-        assertTrue(token.isPresent());
-        return token.get();
+        String token = userRepo.addUser("testEmail", "pass");
+        return token;
     }
 }
