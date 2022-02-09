@@ -13,8 +13,6 @@ public class WeatherMain {
     private final float tempMin;
     @JsonProperty("temp_max")
     private final float tempMax;
-    @JsonProperty("pressure")
     private final int pressure;
-    @JsonProperty("humidity")
     private final int humidity;
 }

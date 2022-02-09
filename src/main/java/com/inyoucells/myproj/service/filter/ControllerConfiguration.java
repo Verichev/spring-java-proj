@@ -1,7 +1,7 @@
 package com.inyoucells.myproj.service.filter;
 
 import com.inyoucells.myproj.service.auth.TokenValidator;
-import com.inyoucells.myproj.service.weather.model.SettingConfig;
+import com.inyoucells.myproj.service.weather.model.WeatherClientConfig;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -28,8 +28,8 @@ public class ControllerConfiguration {
     }
 
     @Bean
-    @ConfigurationProperties(prefix = "setting")
-    public SettingConfig settings() {
-        return new SettingConfig();
+    @ConfigurationProperties(prefix = "weather")
+    public WeatherClientConfig weatherClientConfig() {
+        return new WeatherClientConfig();
     }
 }
