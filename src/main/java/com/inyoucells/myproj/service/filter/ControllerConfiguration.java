@@ -1,6 +1,9 @@
 package com.inyoucells.myproj.service.filter;
 
 import com.inyoucells.myproj.service.auth.TokenValidator;
+import com.inyoucells.myproj.service.order.OrderApiDelegate;
+import com.inyoucells.myproj.service.order.OrderApiDelegateImpl;
+import com.inyoucells.myproj.service.order.data.OrderRepository;
 import com.inyoucells.myproj.service.weather.model.WeatherClientConfig;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -31,5 +34,10 @@ public class ControllerConfiguration {
     @ConfigurationProperties(prefix = "weather")
     public WeatherClientConfig weatherClientConfig() {
         return new WeatherClientConfig();
+    }
+
+    @Bean
+    public OrderApiDelegate provideOrderApiDelegate(OrderRepository orderRepository) {
+        return new OrderApiDelegateImpl(orderRepository);
     }
 }

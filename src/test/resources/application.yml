@@ -6,3 +6,6 @@ spring:
     url: jdbc:h2:mem:db
     username: sa
     password: password
+
+keystore:
+  weatherKey: 495e960f24bacce62edfcc8806bc13bb

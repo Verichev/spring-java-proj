@@ -1,0 +1,153 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Swagger Order
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:8080/
+paths:
+  /order:
+    get:
+      summary: List all orders
+      operationId: listOrders
+      tags:
+        - orders
+      parameters:
+        - name: userId
+          required: true
+          in: query
+          description: User Id attribute
+          schema:
+            type: integer
+            format: int64
+        - name: page
+          in: query
+          description: Page index
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          description: Size of page
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: A paged array of order
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderListResponse"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create an order
+      operationId: createOrder
+      tags:
+        - orders
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          description: User Id attribute
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        '201':
+          description: Null response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /order/{orderId}:
+    get:
+      summary: Info for a specific order
+      operationId: getOrderById
+      tags:
+        - orders
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          description: The id of the order to retrieve
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderResponse"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Order:
+      type: object
+      required:
+        - date
+        - userId
+      properties:
+        name:
+          type: string
+        date:
+          type: string
+    OrderResponse:
+      type: object
+      required:
+        - id
+        - date
+        - userId
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        date:
+          type: string
+        userId:
+          type: integer
+          format: int64
+    OrderListResponse:
+      type: array
+      items:
+        $ref: "#/components/schemas/OrderResponse"
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
