@@ -9,13 +9,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inyoucells.myproj.data.DriverFakeProvider;
-import com.inyoucells.myproj.data.DriverRepo;
-import com.inyoucells.myproj.data.UserRepo;
-import com.inyoucells.myproj.models.Driver;
 import com.inyoucells.myproj.models.errors.ApiError;
 import com.inyoucells.myproj.models.errors.HttpErrorMessage;
-import com.inyoucells.myproj.models.response.AddDriverResponse;
-import com.inyoucells.myproj.models.response.DriverResponse;
+import com.inyoucells.myproj.service.auth.data.repo.UserRepo;
+import com.inyoucells.myproj.service.car.models.AddDriverResponse;
+import com.inyoucells.myproj.service.driver.data.repo.DriverRepo;
+import com.inyoucells.myproj.service.driver.models.Driver;
+import com.inyoucells.myproj.service.driver.models.DriverResponse;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

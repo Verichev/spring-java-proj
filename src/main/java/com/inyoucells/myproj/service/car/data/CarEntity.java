@@ -1,4 +1,4 @@
-package com.inyoucells.myproj.data.entity;
+package com.inyoucells.myproj.service.car.data;
 
 import java.util.Objects;
 import java.util.UUID;

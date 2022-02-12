@@ -1,9 +1,10 @@
 package com.inyoucells.myproj.service.car;
 
-import com.inyoucells.myproj.data.CarRepo;
-import com.inyoucells.myproj.data.DriverRepo;
-import com.inyoucells.myproj.models.Car;
 import com.inyoucells.myproj.models.errors.ServiceError;
+import com.inyoucells.myproj.service.car.data.repo.CarRepo;
+import com.inyoucells.myproj.service.car.models.Car;
+import com.inyoucells.myproj.service.car.models.CarRequest;
+import com.inyoucells.myproj.service.driver.data.repo.DriverRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public UUID addCar(long userId, Car car) throws ServiceError {
+    public UUID addCar(long userId, CarRequest car) throws ServiceError {
         return carRepo.addCar(userId, car);
     }
 

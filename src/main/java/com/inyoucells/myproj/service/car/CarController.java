@@ -2,11 +2,11 @@ package com.inyoucells.myproj.service.car;
 
 import static com.inyoucells.myproj.utils.ResponseUtils.withResponse;
 
-import com.inyoucells.myproj.models.Car;
 import com.inyoucells.myproj.models.errors.ServiceError;
 import com.inyoucells.myproj.models.errors.TypicalError;
-import com.inyoucells.myproj.models.response.AddCarResponse;
-import com.inyoucells.myproj.models.response.CarResponse;
+import com.inyoucells.myproj.service.car.models.AddCarResponse;
+import com.inyoucells.myproj.service.car.models.CarRequest;
+import com.inyoucells.myproj.service.car.models.CarResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +41,7 @@ public class CarController {
     }
 
     @PostMapping("/car")
-    ResponseEntity<AddCarResponse> addCar(@RequestAttribute Long userId, @RequestBody Car car) {
+    ResponseEntity<AddCarResponse> addCar(@RequestAttribute Long userId, @RequestBody CarRequest car) {
         if (car.getDriverId() == null) {
             throw new ServiceError(TypicalError.MISSING_DRIVER_ID);
         } else {

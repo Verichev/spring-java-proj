@@ -7,8 +7,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.inyoucells.myproj.data.UserRepo;
 import com.inyoucells.myproj.service.auth.TokenValidator;
+import com.inyoucells.myproj.service.auth.data.repo.UserRepo;
 import com.inyoucells.myproj.service.order.data.OrderRepository;
 import com.inyoucells.myproj.service.order.model.Order;
 import com.inyoucells.myproj.service.order.model.OrderResponse;

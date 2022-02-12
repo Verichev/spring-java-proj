@@ -1,6 +1,6 @@
-package com.inyoucells.myproj.models;
+package com.inyoucells.myproj.service.car.models;
 
-import com.inyoucells.myproj.data.entity.CarEntity;
+import com.inyoucells.myproj.service.car.data.CarEntity;
 
 import java.util.UUID;
 

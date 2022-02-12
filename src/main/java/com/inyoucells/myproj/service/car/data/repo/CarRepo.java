@@ -1,13 +1,12 @@
-package com.inyoucells.myproj.data;
+package com.inyoucells.myproj.service.car.data.repo;
 
-import com.inyoucells.myproj.data.entity.CarEntity;
-import com.inyoucells.myproj.data.entity.DriverEntity;
-import com.inyoucells.myproj.data.jpa.CarJpaRepository;
-import com.inyoucells.myproj.data.jpa.CustomCarRepo;
-import com.inyoucells.myproj.data.jpa.DriverJpaRepository;
-import com.inyoucells.myproj.models.Car;
 import com.inyoucells.myproj.models.errors.ServiceError;
 import com.inyoucells.myproj.models.errors.TypicalError;
+import com.inyoucells.myproj.service.car.data.CarEntity;
+import com.inyoucells.myproj.service.car.models.Car;
+import com.inyoucells.myproj.service.car.models.CarRequest;
+import com.inyoucells.myproj.service.driver.data.DriverEntity;
+import com.inyoucells.myproj.service.driver.data.repo.DriverJpaRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -75,14 +74,16 @@ public class CarRepo {
         carJpaRepository.deleteByDriverId(driverId);
     }
 
-    public UUID addCar(long userId, Car car) throws ServiceError {
+    public UUID addCar(long userId, CarRequest car) throws ServiceError {
         Optional<DriverEntity> driverUserId = driverJpaRepository.findById(car.getDriverId());
         if (driverUserId.isEmpty()) {
             throw new ServiceError(TypicalError.DRIVER_ID_NOT_FOUND);
         } else if (driverUserId.get().getUserId() != userId) {
             throw new ServiceError(TypicalError.NOT_AUTHORISED);
         }
-        CarEntity result = carJpaRepository.save(new CarEntity(car.getId(), car.getBrand(), car.getYear(), car.isUsed(), car.getHorsepower(), car.getDriverId()));
+        CarEntity result = carJpaRepository.save(
+                new CarEntity(null, car.getBrand(), car.getYear(), car.isUsed(), car.getHorsepower(),
+                        car.getDriverId()));
         return result.getUuid();
     }
 

@@ -6,9 +6,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.inyoucells.myproj.data.UserRepo;
 import com.inyoucells.myproj.models.errors.ApiError;
 import com.inyoucells.myproj.models.errors.HttpErrorMessage;
+import com.inyoucells.myproj.service.auth.data.repo.UserRepo;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

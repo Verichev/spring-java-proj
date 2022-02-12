@@ -1,12 +1,12 @@
-package com.inyoucells.myproj.data;
+package com.inyoucells.myproj.service.driver.data.repo;
 
-import com.inyoucells.myproj.data.entity.DriverEntity;
-import com.inyoucells.myproj.data.jpa.DriverJpaRepository;
-import com.inyoucells.myproj.models.Car;
-import com.inyoucells.myproj.models.Driver;
-import com.inyoucells.myproj.models.DriverDetail;
 import com.inyoucells.myproj.models.errors.ServiceError;
 import com.inyoucells.myproj.models.errors.TypicalError;
+import com.inyoucells.myproj.service.car.models.Car;
+import com.inyoucells.myproj.service.driver.data.DriverEntity;
+import com.inyoucells.myproj.service.driver.models.Driver;
+import com.inyoucells.myproj.service.driver.models.DriverDetail;
+import com.inyoucells.myproj.service.driver.models.DriverRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -62,7 +62,7 @@ public class DriverRepo {
         driverJpaRepository.deleteById(driverId);
     }
 
-    public long addDriver(long userId, Driver driver) {
+    public long addDriver(long userId, DriverRequest driver) {
         DriverEntity result = driverJpaRepository.save(new DriverEntity(driver.getName(), driver.getLicence(), userId));
         return result.getId();
     }

@@ -1,11 +1,18 @@
 package com.inyoucells.myproj.data;
 
-import com.inyoucells.myproj.data.entity.DriverEntity;
-import com.inyoucells.myproj.data.jpa.DriverJpaRepository;
-import com.inyoucells.myproj.models.Driver;
-import com.inyoucells.myproj.models.DriverDetail;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import com.inyoucells.myproj.models.errors.HttpErrorMessage;
 import com.inyoucells.myproj.models.errors.ServiceError;
+import com.inyoucells.myproj.service.driver.data.DriverEntity;
+import com.inyoucells.myproj.service.driver.data.repo.DriverJpaRepository;
+import com.inyoucells.myproj.service.driver.data.repo.DriverRepo;
+import com.inyoucells.myproj.service.driver.models.Driver;
+import com.inyoucells.myproj.service.driver.models.DriverDetail;
+import com.inyoucells.myproj.service.driver.models.DriverRequest;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,8 +25,6 @@ import org.springframework.http.HttpStatus;
 
 import java.util.Collections;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class DriverRepoTest {
@@ -81,7 +86,7 @@ class DriverRepoTest {
 
     @Test
     void addDriver() {
-        Driver driver = new Driver("John", "licence1");
+        DriverRequest driver = new DriverRequest("John", "licence1");
         DriverEntity resultEntity = new DriverEntity("John", "licence1", 10);
         resultEntity.setId(1000L);
         DriverEntity driverEntity = new DriverEntity("John", "licence1", 10);

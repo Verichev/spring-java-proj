@@ -1,6 +1,6 @@
 package com.inyoucells.myproj.service.auth;
 
-import com.inyoucells.myproj.data.UserRepo;
+import com.inyoucells.myproj.service.auth.data.repo.UserRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

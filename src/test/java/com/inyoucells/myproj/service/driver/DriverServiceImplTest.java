@@ -1,9 +1,13 @@
 package com.inyoucells.myproj.service.driver;
 
-import com.inyoucells.myproj.data.DriverRepo;
-import com.inyoucells.myproj.models.Driver;
-import com.inyoucells.myproj.models.DriverDetail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.inyoucells.myproj.models.errors.ServiceError;
+import com.inyoucells.myproj.service.driver.data.repo.DriverRepo;
+import com.inyoucells.myproj.service.driver.models.Driver;
+import com.inyoucells.myproj.service.driver.models.DriverDetail;
+import com.inyoucells.myproj.service.driver.models.DriverRequest;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,8 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 class DriverServiceImplTest {
@@ -55,7 +57,7 @@ class DriverServiceImplTest {
 
     @Test
     void addCar() {
-        Driver driver = new Driver("testName", "textLicence");
+        DriverRequest driver = new DriverRequest("testName", "textLicence");
         driverService.addDriver(-1, driver);
 
         Mockito.verify(driverRepo).addDriver(-1, driver);

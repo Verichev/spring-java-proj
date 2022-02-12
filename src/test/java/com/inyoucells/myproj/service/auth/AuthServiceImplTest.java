@@ -2,7 +2,7 @@ package com.inyoucells.myproj.service.auth;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.inyoucells.myproj.data.UserRepo;
+import com.inyoucells.myproj.service.auth.data.repo.UserRepo;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

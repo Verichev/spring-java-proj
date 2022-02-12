@@ -8,15 +8,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inyoucells.myproj.data.CarFakeProvider;
-import com.inyoucells.myproj.data.CarRepo;
-import com.inyoucells.myproj.data.DriverRepo;
-import com.inyoucells.myproj.data.UserRepo;
-import com.inyoucells.myproj.models.Car;
-import com.inyoucells.myproj.models.Driver;
 import com.inyoucells.myproj.models.errors.ApiError;
 import com.inyoucells.myproj.models.errors.HttpErrorMessage;
-import com.inyoucells.myproj.models.response.CarResponse;
 import com.inyoucells.myproj.service.auth.TokenValidator;
+import com.inyoucells.myproj.service.auth.data.repo.UserRepo;
+import com.inyoucells.myproj.service.car.data.repo.CarRepo;
+import com.inyoucells.myproj.service.car.models.Car;
+import com.inyoucells.myproj.service.car.models.CarResponse;
+import com.inyoucells.myproj.service.driver.data.repo.DriverRepo;
+import com.inyoucells.myproj.service.driver.models.DriverRequest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -71,7 +71,7 @@ class CarControllerTest {
         userRepo.clean();
         String token = userRepo.addUser("testEmail", "pass");
         long userId = tokenValidator.parseUserId(token);
-        this.driverId = driverRepo.addDriver(userId, new Driver("name", "licence"));
+        this.driverId = driverRepo.addDriver(userId, new DriverRequest("name", "licence"));
         this.token = token;
     }
 

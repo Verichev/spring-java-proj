@@ -5,8 +5,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.inyoucells.myproj.data.UserRepo;
 import com.inyoucells.myproj.service.auth.TokenValidator;
+import com.inyoucells.myproj.service.auth.data.repo.UserRepo;
 import com.inyoucells.myproj.service.order.data.OrderRepository;
 import com.inyoucells.myproj.service.order.model.OrderResponse;
 
@@ -54,11 +54,11 @@ class OrderControllerCachingTest {
     }
 
     @Test
-    void getOrder_empty() throws Exception {
+    void getOrder_cached() throws Exception {
         String userId = String.valueOf(createValidToken());
         MockHttpServletRequestBuilder requestBuilder = get("/order").param("userId", userId);
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 500; i++) {
             ResultActions resultActions = mockMvc.perform(requestBuilder);
             MvcResult result = resultActions.andExpect(status().isOk()).andReturn();
             List<OrderResponse> orders = Arrays.asList(

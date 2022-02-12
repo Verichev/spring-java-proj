@@ -1,6 +1,7 @@
-package com.inyoucells.myproj.data.jpa;
+package com.inyoucells.myproj.service.driver.data.repo;
 
-import com.inyoucells.myproj.data.entity.DriverEntity;
+import com.inyoucells.myproj.service.driver.data.DriverEntity;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

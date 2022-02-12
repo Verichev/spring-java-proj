@@ -1,4 +1,4 @@
-package com.inyoucells.myproj.models.response;
+package com.inyoucells.myproj.service.auth.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddDriverResponse {
-    private Long driverId;
+public class TokenResponse {
+    private String token;
 }
