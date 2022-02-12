@@ -4,14 +4,16 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.inyoucells.myproj.data.entity.CarEntity;
-import com.inyoucells.myproj.data.entity.DriverEntity;
-import com.inyoucells.myproj.data.jpa.CarJpaRepository;
-import com.inyoucells.myproj.data.jpa.CustomCarRepo;
-import com.inyoucells.myproj.data.jpa.DriverJpaRepository;
-import com.inyoucells.myproj.models.Car;
 import com.inyoucells.myproj.models.errors.HttpErrorMessage;
 import com.inyoucells.myproj.models.errors.ServiceError;
+import com.inyoucells.myproj.service.car.data.CarEntity;
+import com.inyoucells.myproj.service.car.data.repo.CarJpaRepository;
+import com.inyoucells.myproj.service.car.data.repo.CarRepo;
+import com.inyoucells.myproj.service.car.data.repo.CustomCarRepo;
+import com.inyoucells.myproj.service.car.models.Car;
+import com.inyoucells.myproj.service.car.models.CarRequest;
+import com.inyoucells.myproj.service.driver.data.DriverEntity;
+import com.inyoucells.myproj.service.driver.data.repo.DriverJpaRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -125,7 +127,7 @@ class CarRepoTest {
 
     @Test
     void addCar_driverIdNotFound() {
-        Car car = carFakeProvider.generateCar();
+        CarRequest car = carFakeProvider.generateCarRequest();
         Mockito.doReturn(Optional.empty()).when(driverJpaRepository).findById(car.getDriverId());
         ServiceError serviceError = assertThrows(ServiceError.class, () -> carRepo.addCar(1000, car));
         assertEquals(new ServiceError(HttpStatus.BAD_REQUEST, HttpErrorMessage.DRIVER_ID_NOT_FOUND), serviceError);
@@ -133,7 +135,7 @@ class CarRepoTest {
 
     @Test
     void addCar_userIdDoesntMatch() {
-        Car car = carFakeProvider.generateCar();
+        CarRequest car = carFakeProvider.generateCarRequest();
         Mockito.doReturn(Optional.of(driverWithId(100L))).when(driverJpaRepository).findById(car.getDriverId());
         ServiceError serviceError = assertThrows(ServiceError.class, () -> carRepo.addCar(1000, car));
         assertEquals(new ServiceError(HttpStatus.UNAUTHORIZED, HttpErrorMessage.NOT_AUTHORISED), serviceError);
@@ -141,8 +143,9 @@ class CarRepoTest {
 
     @Test
     void addCar() throws ServiceError {
-        Car car = carFakeProvider.generateCar();
-        CarEntity carEntity = new CarEntity(car.getId(), car.getBrand(), car.getYear(), car.isUsed(), car.getHorsepower(), car.getDriverId());
+        CarRequest car = carFakeProvider.generateCarRequest();
+        CarEntity carEntity = new CarEntity(null, car.getBrand(), car.getYear(), car.isUsed(), car.getHorsepower(),
+                car.getDriverId());
         Mockito.doReturn(carEntity).when(carJpaRepository).save(carEntity);
         Mockito.doReturn(Optional.of(driverWithId(1000L))).when(driverJpaRepository).findById(car.getDriverId());
         assertDoesNotThrow(() -> carRepo.addCar(1000L, car));

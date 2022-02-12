@@ -1,6 +1,6 @@
-package com.inyoucells.myproj.data.jpa;
+package com.inyoucells.myproj.service.car.data.repo;
 
-import com.inyoucells.myproj.data.entity.CarEntity;
+import com.inyoucells.myproj.service.car.data.CarEntity;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

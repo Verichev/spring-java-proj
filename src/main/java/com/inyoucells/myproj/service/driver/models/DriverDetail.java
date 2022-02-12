@@ -1,9 +1,11 @@
-package com.inyoucells.myproj.models;
+package com.inyoucells.myproj.service.driver.models;
+
+import com.inyoucells.myproj.service.car.models.Car;
+
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor

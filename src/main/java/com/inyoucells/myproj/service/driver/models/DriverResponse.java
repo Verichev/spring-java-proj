@@ -1,6 +1,4 @@
-package com.inyoucells.myproj.models.response;
-
-import com.inyoucells.myproj.models.Driver;
+package com.inyoucells.myproj.service.driver.models;
 
 import java.util.List;
 

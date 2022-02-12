@@ -1,10 +1,9 @@
-package com.inyoucells.myproj.data;
+package com.inyoucells.myproj.service.auth.data.repo;
 
-import com.inyoucells.myproj.data.entity.UserEntity;
-import com.inyoucells.myproj.data.jpa.UserJpaRepository;
 import com.inyoucells.myproj.models.errors.ServiceError;
 import com.inyoucells.myproj.models.errors.TypicalError;
 import com.inyoucells.myproj.service.auth.AuthConsts;
+import com.inyoucells.myproj.service.auth.data.UserEntity;
 
 import org.springframework.stereotype.Service;
 
@@ -38,7 +37,7 @@ public class UserRepo {
         userJpaRepository.deleteById(userId);
     }
 
-    String createToken(long idCounter) {
+    public String createToken(long idCounter) {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MILLISECOND, AuthConsts.TOKEN_EXPIRATION_TIME);
         String token = idCounter + "_" + calendar.getTimeInMillis();

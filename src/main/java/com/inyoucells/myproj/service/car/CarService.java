@@ -1,7 +1,8 @@
 package com.inyoucells.myproj.service.car;
 
-import com.inyoucells.myproj.models.Car;
 import com.inyoucells.myproj.models.errors.ServiceError;
+import com.inyoucells.myproj.service.car.models.Car;
+import com.inyoucells.myproj.service.car.models.CarRequest;
 
 import java.util.List;
 import java.util.UUID;
@@ -11,7 +12,7 @@ public interface CarService {
 
     void removeCar(long userId, UUID id) throws ServiceError;
 
-    UUID addCar(long userId, Car car) throws ServiceError;
+    UUID addCar(long userId, CarRequest car) throws ServiceError;
 
     List<Car> searchByBrand(long userId, String keyword) throws ServiceError;
 

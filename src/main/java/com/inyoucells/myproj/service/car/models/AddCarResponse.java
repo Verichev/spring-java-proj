@@ -1,4 +1,6 @@
-package com.inyoucells.myproj.models.response;
+package com.inyoucells.myproj.service.car.models;
+
+import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TokenResponse {
-    private String token;
+public class AddCarResponse {
+    private UUID carId;
 }

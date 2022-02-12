@@ -1,6 +1,6 @@
 package com.inyoucells.myproj.data;
 
-import com.inyoucells.myproj.models.Driver;
+import com.inyoucells.myproj.service.driver.models.Driver;
 
 public class DriverFakeProvider {
 

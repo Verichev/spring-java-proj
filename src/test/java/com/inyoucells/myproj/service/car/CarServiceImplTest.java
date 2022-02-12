@@ -3,9 +3,10 @@ package com.inyoucells.myproj.service.car;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.inyoucells.myproj.data.CarFakeProvider;
-import com.inyoucells.myproj.data.CarRepo;
-import com.inyoucells.myproj.models.Car;
 import com.inyoucells.myproj.models.errors.ServiceError;
+import com.inyoucells.myproj.service.car.data.repo.CarRepo;
+import com.inyoucells.myproj.service.car.models.Car;
+import com.inyoucells.myproj.service.car.models.CarRequest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,7 +52,7 @@ class CarServiceImplTest {
 
     @Test
     void addCar() throws ServiceError {
-        Car car = carFakeProvider.generateCar();
+        CarRequest car = carFakeProvider.generateCarRequest();
         carService.addCar(10, car);
 
         Mockito.verify(carRepo).addCar(10, car);

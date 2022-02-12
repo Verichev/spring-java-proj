@@ -1,6 +1,7 @@
-package com.inyoucells.myproj.data.entity;
+package com.inyoucells.myproj.service.driver.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.inyoucells.myproj.service.car.data.CarEntity;
 
 import java.util.List;
 import java.util.Objects;

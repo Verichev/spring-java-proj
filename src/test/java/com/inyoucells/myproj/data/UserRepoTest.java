@@ -3,10 +3,11 @@ package com.inyoucells.myproj.data;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.inyoucells.myproj.data.entity.UserEntity;
-import com.inyoucells.myproj.data.jpa.UserJpaRepository;
 import com.inyoucells.myproj.models.errors.ServiceError;
 import com.inyoucells.myproj.models.errors.TypicalError;
+import com.inyoucells.myproj.service.auth.data.UserEntity;
+import com.inyoucells.myproj.service.auth.data.repo.UserJpaRepository;
+import com.inyoucells.myproj.service.auth.data.repo.UserRepo;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

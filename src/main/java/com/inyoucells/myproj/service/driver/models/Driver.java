@@ -1,6 +1,7 @@
-package com.inyoucells.myproj.models;
+package com.inyoucells.myproj.service.driver.models;
 
-import com.inyoucells.myproj.data.entity.DriverEntity;
+import com.inyoucells.myproj.service.driver.data.DriverEntity;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

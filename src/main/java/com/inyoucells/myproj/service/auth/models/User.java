@@ -1,4 +1,4 @@
-package com.inyoucells.myproj.models;
+package com.inyoucells.myproj.service.auth.models;
 
 import lombok.Data;
 

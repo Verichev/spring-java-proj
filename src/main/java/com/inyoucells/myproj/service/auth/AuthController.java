@@ -2,7 +2,7 @@ package com.inyoucells.myproj.service.auth;
 
 import static com.inyoucells.myproj.utils.ResponseUtils.withResponse;
 
-import com.inyoucells.myproj.models.response.TokenResponse;
+import com.inyoucells.myproj.service.auth.models.TokenResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

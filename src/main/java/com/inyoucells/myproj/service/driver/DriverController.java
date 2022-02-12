@@ -2,10 +2,10 @@ package com.inyoucells.myproj.service.driver;
 
 import static com.inyoucells.myproj.utils.ResponseUtils.withResponse;
 
-import com.inyoucells.myproj.models.Driver;
-import com.inyoucells.myproj.models.response.AddDriverResponse;
-import com.inyoucells.myproj.models.response.DriverDetailResponse;
-import com.inyoucells.myproj.models.response.DriverResponse;
+import com.inyoucells.myproj.service.car.models.AddDriverResponse;
+import com.inyoucells.myproj.service.driver.models.DriverDetailResponse;
+import com.inyoucells.myproj.service.driver.models.DriverRequest;
+import com.inyoucells.myproj.service.driver.models.DriverResponse;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,7 +46,7 @@ public class DriverController {
     }
 
     @PostMapping("/driver")
-    ResponseEntity<AddDriverResponse> addDriver(@RequestAttribute Long userId, @RequestBody Driver driver) {
+    ResponseEntity<AddDriverResponse> addDriver(@RequestAttribute Long userId, @RequestBody DriverRequest driver) {
         return withResponse(new AddDriverResponse(driverService.addDriver(userId, driver)));
     }
 }
