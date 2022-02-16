@@ -4,11 +4,14 @@ import com.inyoucells.myproj.models.errors.ServiceError;
 import com.inyoucells.myproj.models.errors.TypicalError;
 import com.inyoucells.myproj.service.auth.AuthConsts;
 import com.inyoucells.myproj.service.auth.data.UserEntity;
+import com.inyoucells.myproj.service.auth.models.User;
 
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserRepo {
@@ -17,6 +20,12 @@ public class UserRepo {
 
     public UserRepo(UserJpaRepository userJpaRepository) {
         this.userJpaRepository = userJpaRepository;
+    }
+
+    public List<User> getUsers() {
+        return userJpaRepository.findAll().stream()
+                .map(userEntity -> new User(userEntity.getId(), userEntity.getEmail(), userEntity.getPassword()))
+                .collect(Collectors.toList());
     }
 
     public String addUser(String email, String pass) {

@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 
 @RestController
 @Api(value = "car")
@@ -35,21 +35,21 @@ public class CarController {
         this.carService = carService;
     }
 
-    @ApiOperation(value = "Get all cars", notes = "Get all cars for specific driver")
+    @Operation(summary = "Get all cars for specific driver")
     @GetMapping("/car")
-    ResponseEntity<CarResponse> getCars(@ApiParam(hidden = true) @RequestAttribute Long userId, long driverId) {
+    ResponseEntity<CarResponse> getCars(@Parameter(hidden = true) @RequestAttribute Long userId, long driverId) {
         return withResponse(new CarResponse(carService.getCars(userId, driverId)));
     }
 
-    @ApiOperation(value = "Remove car", notes = "Remove car by carId")
+    @Operation(summary = "Remove car by carId")
     @DeleteMapping("/car/{carId}")
-    void removeCar(@ApiParam(hidden = true) @RequestAttribute Long userId, @PathVariable UUID carId) {
+    void removeCar(@Parameter(hidden = true) @RequestAttribute Long userId, @PathVariable UUID carId) {
         carService.removeCar(userId, carId);
     }
 
-    @ApiOperation(value = "Create new car", notes = "Create car by given car information")
+    @Operation(summary = "Create car by given car information")
     @PostMapping("/car")
-    ResponseEntity<AddCarResponse> addCar(@ApiParam(hidden = true) @RequestAttribute Long userId, @RequestBody CarRequest car) {
+    ResponseEntity<AddCarResponse> addCar(@Parameter(hidden = true) @RequestAttribute Long userId, @RequestBody CarRequest car) {
         if (car.getDriverId() == null) {
             throw new ServiceError(TypicalError.MISSING_DRIVER_ID);
         } else {
@@ -58,21 +58,21 @@ public class CarController {
         }
     }
 
-    @ApiOperation(value = "Search cars by brand", notes = "Search cars by keyword as part of it's brand")
+    @Operation(summary = "Search cars by keyword as part of it's brand")
     @GetMapping("/car/search/brand")
-    ResponseEntity<CarResponse> searchCarsByBrand(@ApiParam(hidden = true) @RequestAttribute Long userId, String keyword) {
+    ResponseEntity<CarResponse> searchCarsByBrand(@Parameter(hidden = true) @RequestAttribute Long userId, String keyword) {
         return withResponse(new CarResponse(carService.searchByBrand(userId, keyword)));
     }
 
-    @ApiOperation(value = "Get cars by year and brand", notes = "Get cars by year and brand provided")
+    @Operation(summary = "Get cars by year and brand provided")
     @GetMapping("/car/yearbrand")
-    ResponseEntity<CarResponse> getCarsByYearAndBrand(@ApiParam(hidden = true) @RequestAttribute Long userId, String year, String brand) {
+    ResponseEntity<CarResponse> getCarsByYearAndBrand(@Parameter(hidden = true) @RequestAttribute Long userId, String year, String brand) {
         return withResponse(new CarResponse(carService.getCarsByYearAndBrand(userId, year, brand)));
     }
 
-    @ApiOperation(value = "Get cars with horsepower", notes = "Get cars with horsepower above certain value")
+    @Operation(summary = "Get cars with horsepower above certain value")
     @GetMapping("/car/morehorsepower")
-    ResponseEntity<CarResponse> getCarsWitHorsepowerMore(@ApiParam(hidden = true) @RequestAttribute Long userId, Integer minHorsePower) {
+    ResponseEntity<CarResponse> getCarsWitHorsepowerMore(@Parameter(hidden = true) @RequestAttribute Long userId, Integer minHorsePower) {
         return withResponse(new CarResponse(carService.getCarsWitHorsepowerMore(userId, minHorsePower)));
     }
 }
