@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("auth")
@@ -25,13 +25,13 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @ApiOperation(value = "Registration", notes = "Register new user")
+    @Operation(summary = "Register new user")
     @GetMapping(path = "/signup")
     ResponseEntity<TokenResponse> signup(String email, String pass) {
         return wrapToken(authService.signup(email, pass));
     }
 
-    @ApiOperation(value = "Login", notes = "Login user")
+    @Operation(summary = "Login user")
     @GetMapping(path = "/login")
     ResponseEntity<TokenResponse> signin(String email, String pass) {
         return wrapToken(authService.signin(email, pass));

@@ -1,6 +1,7 @@
-package com.inyoucells.myproj.service.filter;
+package com.inyoucells.myproj.config;
 
 import com.inyoucells.myproj.service.auth.TokenValidator;
+import com.inyoucells.myproj.service.filter.AuthTokenFilter;
 import com.inyoucells.myproj.service.order.OrderApiDelegate;
 import com.inyoucells.myproj.service.order.OrderApiDelegateImpl;
 import com.inyoucells.myproj.service.order.data.OrderRepository;

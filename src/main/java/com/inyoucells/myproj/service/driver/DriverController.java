@@ -18,10 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 
 @RestController
 @Api(value = "driver")
@@ -33,41 +31,32 @@ public class DriverController {
         this.driverService = driverService;
     }
 
-    @ApiOperation(value = "Get drivers", notes = "Get list of drivers with pagination")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "page", value = "Page number", required = false, paramType = "Integer"),
-            @ApiImplicitParam(name = "size", value = "Size of the page", required = false, paramType = "Integer")
-    })
+    @Operation(summary = "Get list of drivers with pagination")
     @GetMapping("/driver")
-    ResponseEntity<DriverResponse> getDrivers(@ApiParam(hidden = true) @RequestAttribute Long userId,
-                                              @RequestParam(defaultValue = "0", required = false) int page,
-                                              @RequestParam(defaultValue = "5", required = false) int size) {
+    ResponseEntity<DriverResponse> getDrivers(@Parameter(hidden = true) @RequestAttribute Long userId,
+                                              @RequestParam(name = "Page number", defaultValue = "0", required = false) int page,
+                                              @RequestParam(name = "Size of the page", defaultValue = "5", required = false) int size) {
         return withResponse(new DriverResponse(driverService.getDrivers(userId, page, size)));
     }
 
-    @ApiOperation(value = "Get drivers with cars", notes = "Get list of drivers with car details with pagination")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "page", value = "Page number", required = false, paramType = "Integer"),
-            @ApiImplicitParam(name = "size", value = "Size of the page", required = false, paramType = "Integer")
-    })
+    @Operation(summary = "Get list of drivers with car details with pagination")
     @GetMapping("/driver/full")
-    ResponseEntity<DriverDetailResponse> getDriversFull(@ApiParam(hidden = true) @RequestAttribute Long userId,
-                                                        @RequestParam(defaultValue = "0", required = false) int page,
-                                                        @RequestParam(defaultValue = "5", required = false) int size) {
+    ResponseEntity<DriverDetailResponse> getDriversFull(@Parameter(hidden = true) @RequestAttribute Long userId,
+                                                        @RequestParam(name = "Page number", defaultValue = "0", required = false) int page,
+                                                        @RequestParam(name = "Size of the page", defaultValue = "5", required = false) int size) {
         return withResponse(new DriverDetailResponse(driverService.getDriversFull(userId, page, size)));
     }
 
-    @ApiOperation(value = "Remove driver", notes = "Remove driver by id")
-    @ApiImplicitParam(name = "driverId", value = "Driver id", required = true, dataTypeClass = Long.class, paramType = "path")
+
+    @Operation(summary = "Remove driver by id")
     @DeleteMapping("/driver/{driverId}")
-    public void removeDriver(@ApiParam(hidden = true) @RequestAttribute Long userId, @PathVariable long driverId) {
+    public void removeDriver(@Parameter(hidden = true) @RequestAttribute Long userId, @Parameter(name = "Driver id") @PathVariable long driverId) {
         driverService.removeDriver(userId, driverId);
     }
 
-    @ApiOperation(value = "Add driver", notes = "Add new driver with details")
-    @ApiImplicitParam(name = "driver", value = "Driver details", required = true, dataTypeClass = DriverRequest.class)
+    @Operation(summary = "Add new driver with details")
     @PostMapping("/driver")
-    ResponseEntity<AddDriverResponse> addDriver(@ApiParam(hidden = true) @RequestAttribute Long userId, @RequestBody DriverRequest driver) {
+    ResponseEntity<AddDriverResponse> addDriver(@Parameter(hidden = true) @RequestAttribute Long userId, @Parameter(name = "Driver details") @RequestBody DriverRequest driver) {
         return withResponse(new AddDriverResponse(driverService.addDriver(userId, driver)));
     }
 }

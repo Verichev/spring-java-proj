@@ -10,5 +10,11 @@ spring:
     username: postgres
     password: ljqperpe7j^834
 
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+
 keystore:
   weatherKey: 495e960f24bacce62edfcc8806bc13bb
+
