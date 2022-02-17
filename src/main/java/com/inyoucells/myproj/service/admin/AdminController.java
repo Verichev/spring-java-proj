@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-import lombok.extern.log4j.Log4j;
-
 @Controller
-@Log4j
 public class AdminController {
 
     private final UserRepo userRepo;
@@ -32,7 +29,6 @@ public class AdminController {
 
     @PostMapping("/user")
     public String viewUsers(Model model, @RequestParam String email, @RequestParam String pass) {
-        log.debug("Adding user: " + email + ", " + pass);
         userRepo.addUser(email, pass);
         model.addAttribute("email", email);
         return "user_added";
