@@ -27,3 +27,10 @@ input{
     margin-top: 2em;
 }
 
+canvas{
+	background-color: #000000;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
