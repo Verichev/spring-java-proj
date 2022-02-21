@@ -174,7 +174,7 @@ class DriverControllerTest {
 
         MockHttpServletRequestBuilder requestBuilder = get("/driver")
                 .header("token", token)
-                .param("page", "0")
+                .queryParam("page", "0")
                 .param("size", "10");
 
         ResultActions resultActions = mockMvc.perform(requestBuilder);

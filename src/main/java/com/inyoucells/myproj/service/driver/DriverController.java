@@ -34,16 +34,16 @@ public class DriverController {
     @Operation(summary = "Get list of drivers with pagination")
     @GetMapping("/driver")
     ResponseEntity<DriverResponse> getDrivers(@Parameter(hidden = true) @RequestAttribute Long userId,
-                                              @RequestParam(name = "Page number", defaultValue = "0", required = false) int page,
-                                              @RequestParam(name = "Size of the page", defaultValue = "5", required = false) int size) {
+                                              @Parameter(name = "Page number") @RequestParam(defaultValue = "0", required = false) int page,
+                                              @Parameter(name = "Size of the page") @RequestParam(defaultValue = "5", required = false) int size) {
         return withResponse(new DriverResponse(driverService.getDrivers(userId, page, size)));
     }
 
     @Operation(summary = "Get list of drivers with car details with pagination")
     @GetMapping("/driver/full")
     ResponseEntity<DriverDetailResponse> getDriversFull(@Parameter(hidden = true) @RequestAttribute Long userId,
-                                                        @RequestParam(name = "Page number", defaultValue = "0", required = false) int page,
-                                                        @RequestParam(name = "Size of the page", defaultValue = "5", required = false) int size) {
+                                                        @Parameter(name = "Page number") @RequestParam(defaultValue = "0", required = false) int page,
+                                                        @Parameter(name = "Size of the page") @RequestParam(defaultValue = "5", required = false) int size) {
         return withResponse(new DriverDetailResponse(driverService.getDriversFull(userId, page, size)));
     }
 
